@@ -1,0 +1,13 @@
+{
+  "name": "lucent",
+  "version": "1.0.0",
+  "description": "React frontend dependencies",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
