@@ -1,0 +1,3 @@
+# Python dependencies
+# File: backend/requirements.txt
+# TODO: Implement this file
