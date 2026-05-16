@@ -1,0 +1,3 @@
+# Python dependencies including FastAPI, Celery, rembg
+# File: backend/requirements.txt
+# TODO: Implement this file
