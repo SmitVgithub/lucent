@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lucent - Architecture Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .header .meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header .meta-item {
+            background: #f7fafc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .diagram-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .diagram-container.active {
+            display: block;
+        }
+
+        .diagram-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .diagram-description {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .diagram-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            overflow-x: auto;
+        }
+
+        .mermaid {
+            background: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        .no-diagram {
+            text-align: center;
+            color: #a0aec0;
+            padding: 60px 20px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .diagram-container {
+                padding: 20px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 lucent</h1>
+            <div class="subtitle">Architecture Visualization</div>
+            <div class="meta">
+                <div class="meta-item">📦 Repository: undefined</div>
+                <div class="meta-item">💻 Language: unknown</div>
+                <div class="meta-item">📅 Generated: 5/16/2026</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showDiagram('system')">System Architecture</button>
+            <button class="tab" onclick="showDiagram('sequence')">Request Flow</button>
+            <button class="tab" onclick="showDiagram('er')">Database Schema</button>
+            <button class="tab" onclick="showDiagram('deployment')">Deployment</button>
+        </div>
+
+        <div id="system" class="diagram-container active">
+            <h2 class="diagram-title">System Architecture</h2>
+            <p class="diagram-description">High-level overview of system components and their relationships</p>
+            <div class="diagram-content">
+                <div class="mermaid">graph TB
+    subgraph Client["Client Layer"]
+        WEB["React SPA\n(Vercel)"]
+        MOBILE["Future Mobile App"]
+    end
+
+    subgraph CDN["Edge Layer"]
+        CF["Cloudflare CDN"]
+        R2["Cloudflare R2\nImage Storage"]
+    end
+
+    subgraph API["API Gateway Layer"]
+        NGINX["Nginx\nReverse Proxy"]
+        FASTAPI["FastAPI\nREST + WebSocket"]
+    end
+
+    subgraph Auth["Authentication"]
+        SUPA_AUTH["Supabase Auth\nJWT + OAuth"]
+    end
+
+    subgraph Processing["ML Processing Layer"]
+        CELERY["Celery Workers\n(x2-4 instances)"]
+        REMBG["rembg Model\n(U2-Net)"]
+        PREVIEW["Preview Generator\n(Pillow)"]
+    end
+
+    subgraph Queue["Message Queue"]
+        REDIS["Redis\nTask Queue + Cache"]
+    end
+
+    subgraph Data["Data Layer"]
+        POSTGRES[("PostgreSQL\n(Supabase)")]
+        subgraph Tables["Database Schema"]
+            USERS["users"]
+            IMAGES["images"]
+            SUBS["subscriptions"]
+            USAGE["usage_logs"]
+        end
+    end
+
+    subgraph Payments["Payment Processing"]
+        STRIPE["Stripe\nSubscriptions"]
+    end
+
+    subgraph Monitoring["Observability"]
+        SENTRY["Sentry\nError Tracking"]
+        LOGS["Axiom/Logtail\nLog Aggregation"]
+    end
+
+    WEB -->|HTTPS| CF
+    MOBILE -->|HTTPS| CF
+    CF -->|Proxy| NGINX
+    CF -->|Static Assets| R2
+    
+    NGINX -->|/api/*| FASTAPI
+    NGINX -->|/ws/*| FASTAPI
+    
+    FASTAPI -->|Verify JWT| SUPA_AUTH
+    FASTAPI -->|Queue Task| REDIS
+    FASTAPI -->|CRUD| POSTGRES
+    FASTAPI -->|Upload| R2
+    
+    REDIS -->|Consume| CELERY
+    CELERY -->|Process| REMBG
+    CELERY -->|Thumbnail| PREVIEW
+    CELERY -->|Store Result| R2
+    CELERY -->|Update Status| POSTGRES
+    CELERY -->|Notify| REDIS
+    
+    REDIS -->|Pub/Sub| FASTAPI
+    FASTAPI -->|WebSocket Push| WEB
+    
+    WEB -->|Checkout| STRIPE
+    STRIPE -->|Webhook| FASTAPI
+    FASTAPI -->|Update Plan| POSTGRES
+    
+    FASTAPI -->|Errors| SENTRY
+    CELERY -->|Errors| SENTRY
+    NGINX -->|Access Logs| LOGS</div>
+            </div>
+        </div>
+
+        
+        <div id="sequence" class="diagram-container">
+            <h2 class="diagram-title">Request Flow</h2>
+            <p class="diagram-description">Sequence diagram showing how requests flow through the system</p>
+            <div class="diagram-content">
+                <div class="mermaid">sequenceDiagram
+    participant Client
+    participant API
+    participant Auth
+
+    Client->>API: HTTP Request
+    API->>Auth: Validate Token
+    Auth-->>API: Token Valid
+    API-->>Client: HTTP Response
+
+    Note over Client,Auth: Error Handling
+    API->>Auth: Invalid Token
+    Auth-->>API: 401 Unauthorized
+    API-->>Client: Error Response</div>
+            </div>
+        </div>
+        
+
+        
+        <div id="er" class="diagram-container">
+            <h2 class="diagram-title">Database Schema</h2>
+            <p class="diagram-description">Entity-relationship diagram showing database structure</p>
+            <div class="diagram-content">
+                <div class="mermaid">erDiagram
+    USER {
+        string id PK
+        string email
+        string password_hash
+        datetime created_at
+        datetime updated_at
+    }</div>
+            </div>
+        </div>
+        
+
+        
+        <div id="deployment" class="diagram-container">
+            <h2 class="diagram-title">Deployment Architecture</h2>
+            <p class="diagram-description">Infrastructure and deployment pipeline visualization</p>
+            <div class="diagram-content">
+                <div class="mermaid">graph TB
+    subgraph "Development"
+        Dev[Developer]
+        Git[Git Repository]
+    end
+
+    subgraph "CI/CD Pipeline"
+        CI[GitHub Actions]
+        Build[Build & Test]
+        Deploy[Deploy]
+    end
+
+    subgraph "Production Environment"
+        Docker[Docker Host]
+        Container[Application Container]
+    end
+
+    Dev -->|Push Code| Git
+    Git -->|Trigger| CI
+    CI --> Build
+    Build --> Deploy
+    Deploy -->|Deploy| Docker
+    Docker --> Container</div>
+            </div>
+        </div>
+        
+
+        <div class="footer">
+            <p>Generated by Blueprint Brain - The Architect</p>
+            <p>Request: I want to create e background remover website.
+
+• What is your expected user volume? (hobby project,...</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // Tab switching
+        function showDiagram(diagramId) {
+            // Hide all diagrams
+            document.querySelectorAll('.diagram-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected diagram
+            document.getElementById(diagramId).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Export functionality (future enhancement)
+        function exportDiagram(format) {
+            alert('Export to ' + format + ' - Coming soon!');
+        }
+    </script>
+</body>
+</html>
