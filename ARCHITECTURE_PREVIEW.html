@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureDoc Search - HIPAA Compliant Document Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-1: #00d4aa;
+            --accent-2: #0099ff;
+            --accent-3: #7c3aed;
+            --border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(0, 212, 170, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.03);
+            --text-primary: #1a1a2e;
+            --text-secondary: #5a5a7a;
+            --border: rgba(0, 0, 0, 0.1);
+            --glow: rgba(0, 153, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(0, 153, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-1);
+            backdrop-filter: blur(10px);
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .mockup-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mockup-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .mockup-card:hover .laptop-frame {
+            box-shadow: 0 25px 80px rgba(0, 212, 170, 0.2), 0 0 0 1px var(--accent-1);
+        }
+
+        .laptop-frame {
+            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+            border-radius: 16px 16px 0 0;
+            padding: 12px 12px 0;
+            position: relative;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .laptop-notch {
+            width: 80px;
+            height: 6px;
+            background: #3a3a4a;
+            border-radius: 3px;
+            margin: 0 auto 10px;
+        }
+
+        .laptop-screen {
+            background: var(--bg-secondary);
+            border-radius: 8px 8px 0 0;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .laptop-base {
+            background: linear-gradient(to bottom, #3a3a4a, #2a2a3a);
+            height: 14px;
+            border-radius: 0 0 8px 8px;
+            margin: 0 -20px;
+            position: relative;
+        }
+
+        .laptop-base::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #4a4a5a;
+            border-radius: 2px;
+        }
+
+        .screen-content {
+            padding: 1rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+        }
+
+        .screen-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .screen-logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-radius: 6px;
+        }
+
+        .screen-nav {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .nav-item {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--accent-1);
+        }
+
+        .search-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            flex: 1;
+            font-size: 0.75rem;
+            outline: none;
+        }
+
+        .search-icon {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .doc-list {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .doc-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.2s ease;
+        }
+
+        .doc-item:hover {
+            border-color: var(--accent-1);
+        }
+
+        .doc-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .doc-info {
+            flex: 1;
+        }
+
+        .doc-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        .doc-meta {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .compliance-badge {
+            font-size: 0.55rem;
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--accent-1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-form {
+            max-width: 200px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.7rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .sso-options {
+            margin-top: 0.75rem;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.6rem;
+            cursor: pointer;
+        }
+
+        .chip.active {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-color: transparent;
+            color: white;
+        }
+
+        .preview-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            flex: 1;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .action-btn {
+            width: 24px;
+            height: 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+
+        .highlight-text {
+            background: rgba(0, 212, 170, 0.2);
+            padding: 0.1rem 0.2rem;
+            border-radius: 2px;
+        }
+
+        .audit-log {
+            font-size: 0.6rem;
+        }
+
+        .audit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .audit-time {
+            color: var(--text-secondary);
+            min-width: 50px;
+        }
+
+        .audit-action {
+            flex: 1;
+        }
+
+        .audit-user {
+            color: var(--accent-2);
+        }
+
+        .settings-section {
+            margin-bottom: 0.75rem;
+        }
+
+        .settings-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0;
+            font-size: 0.7rem;
+        }
+
+        .toggle-switch {
+            width: 32px;
+            height: 18px;
+            background: var(--border);
+            border-radius: 9px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-1);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+        }
+
+        .toggle-switch.active::after {
+            left: 16px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-placeholder {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 80px;
+            display: flex;
+            align-items: flex-end;
+            padding: 0.5rem;
+            gap: 0.3rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--accent-1), var(--accent-2));
+            border-radius: 3px 3px 0 0;
+            opacity: 0.7;
+        }
+
+        .mockup-info {
+            text-align: center;
+            padding: 1.25rem 1rem;
+        }
+
+        .mockup-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .mockup-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer span {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .mockups-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            header {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🔐</div>
+            <span class="logo-text">SecureDoc Search</span>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-text">Dark</span>
+        </button>
+    </header>
+
+    <section class="hero">
+        <h1>HIPAA & ISO 27001 Compliant Document Search</h1>
+        <p>Enterprise-grade dynamic document search widget that embeds seamlessly into your website with full compliance certification</p>
+        <div class="badges">
+            <span class="badge">🏥 HIPAA Compliant</span>
+            <span class="badge">🔒 ISO 27001 Certified</span>
+            <span class="badge">🌐 Embeddable Widget</span>
+            <span class="badge">⚡ Real-time Search</span>
+        </div>
+    </section>
+
+    <main class="mockups-grid">
+        <!-- Screen 1: Secure Login -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content" style="justify-content: center; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));">
+                        <div class="login-form">
+                            <div class="screen-logo-icon" style="width: 48px; height: 48px; margin: 0 auto 1rem; border-radius: 12px;"></div>
+                            <div class="login-title">SecureDoc Search</div>
+                            <div class="login-subtitle">HIPAA & ISO 27001 Compliant Access</div>
+                            <input type="text" class="form-input" placeholder="Email address">
+                            <input type="password" class="form-input" placeholder="Password">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; font-size: 0.6rem; margin: 0.5rem 0;">
+                                <input type="checkbox" style="accent-color: var(--accent-1);">
+                                <span>Remember this device (MFA verified)</span>
+                            </div>
+                            <button class="btn-primary">🔐 Secure Sign In</button>
+                            <div class="sso-options">
+                                <div style="margin: 0.5rem 0;">or continue with SSO</div>
+                                <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                                    <span class="chip">Okta</span>
+                                    <span class="chip">Azure AD</span>
+                                    <span class="chip">SAML</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Secure Authentication Portal</div>
+                <div class="mockup-desc">MFA-enabled login with enterprise SSO integration</div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Main Search Dashboard -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <div class="screen-logo-icon"></div>
+                                SecureDoc
+                            </div>
+                            <div class="screen-nav">
+                                <span class="nav-item active">Search</span>
+                                <span class="nav-item">Recent</span>
+                                <span class="nav-item">Audit</span>
+                            </div>
+                        </div>
+                        <div class="search-bar">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="Search patient records, lab results, prescriptions...">
+                            <span style="font-size: 0.6rem; color: var(--accent-1);">⌘K</span>
+                        </div>
+                        <div class="filter-chips">
+                            <span class="chip active">All Documents</span>
+                            <span class="chip">Medical Records</span>
+                            <span class="chip">Lab Results</span>
+                            <span class="chip">Prescriptions</span>
+                            <span class="chip">Imaging</span>
+                        </div>
+                        <div class="doc-list">
+                            <div class="doc-item">
+                                <div class="doc-icon">📋</div>
+                                <div class="doc-info">
+                                    <div class="doc-title">Patient Intake Form - J. Smith</div>
+                                    <div class="doc-meta">Modified 2 hours ago • PHI Protected</div>
+                                </div>
+                                <span class="compliance-badge">HIPAA</span>
+                            </div>
+                            <div class="doc-item">
+                                <div class="doc-icon">🧪</div>
+                                <div class="doc-info">
+                                    <div class="doc-title">Blood Panel Results - ID#4892</div>
+                                    <div class="doc-meta">Modified yesterday • Encrypted</div>
+                                </div>
+                                <span class="compliance-badge">ISO</span>
+                            </div>
+                            <div class="doc-item">
+                                <div class="doc-icon">💊</div>
+                                <div class="doc-info">
+                                    <div class="doc-title">Prescription History - M. Johnson</div>
+                                    <div class="doc-meta">Modified 3 days ago • Audit logged</div>
+                                </div>
+                                <div class="status-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Dynamic Document Search</div>
+                <div class="mockup-desc">Real-time encrypted search across all compliant documents</div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Document Preview with Highlights -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <span style="cursor: pointer;">← Back</span>
+                            </div>
+                            <div class="screen-nav">
+                                <span class="compliance-badge">🔒 Encrypted View</span>
+                            </div>
+                        </div>
+                        <div class="preview-panel" style="flex: 1;">
+                            <div class="preview-header">
+                                <div class="preview-title">📋 Patient Intake Form - J. Smith</div>
+                                <div class="preview-actions">
+                                    <div class="action-btn">📥</div>
+                                    <div class="action-btn">🖨️</div>
+                                    <div class="action-btn">📤</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.65rem; line-height: 1.6; color: var(--text-secondary);">
+                                <p><strong>Patient Name:</strong> <span class="highlight-text">John Smith</span></p>
+                                <p><strong>DOB:</strong> 03/15/1985 | <strong>MRN:</strong> ****4892</p>
+                                <p style="margin-top: 0.5rem;"><strong>Chief Complaint:</strong></p>
+                                <p>Patient presents with <span class="highlight-text">recurring headaches</span> and reports symptoms beginning approximately 2 weeks ago...</p>
+                                <p style="margin-top: 0.5rem;"><strong>Medical History:</strong></p>
+                                <p>• Hypertension (controlled)<br>• Type 2 Diabetes<br>• Previous <span class="highlight-text">MRI scan</span> (2023)</p>
+                            </div>
+                            <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border); font-size: 0.55rem; color: var(--text-secondary);">
+                                <span>🔐 PHI data masked • Access logged • Session expires in 28:45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Secure Document Preview</div>
+                <div class="mockup-desc">View documents with search highlighting and PHI masking</div>
+            </div>
+        </div>
+
+        <!-- Screen 4: Audit Trail -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <div class="screen-logo-icon"></div>
+                                Audit Trail
+                            </div>
+                            <div class="screen-nav">
+                                <span class="chip active">Today</span>
+                                <span class="chip">7 Days</span>
+                                <span class="chip">Export</span>
+                            </div>
+                        </div>
+                        <div class="search-bar">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="Filter by user, action, or document...">
+                        </div>
+                        <div class="audit-log" style="flex: 1;">
+                            <div class="audit-item">
+                                <span class="audit-time">09:45 AM</span>
+                                <span class="audit-action"><span class="audit-user">Dr. Williams</span> viewed Patient Record #4892</span>
+                                <span class="compliance-badge">✓ Logged</span>
+                            </div>
+                            <div class="audit-item">
+                                <span class="audit-time">09:32 AM</span>
+                                <span class="audit-action"><span class="audit-user">Nurse Chen</span> exported Lab Results</span>
+                                <span class="compliance-badge">✓ Logged</span>
+                            </div>
+                            <div class="audit-item">
+                                <span class="audit-time">09:15 AM</span>
+                                <span class="audit-action"><span class="audit-user">Admin</span> modified access permissions</span>
+                                <span class="compliance-badge">✓ Logged</span>
+                            </div>
+                            <div class="audit-item">
+                                <span class="audit-time">08:58 AM</span>
+                                <span class="audit-action"><span class="audit-user">Dr. Patel</span> searched "diabetes treatment"</span>
+                                <span class="compliance-badge">✓ Logged</span>
+                            </div>
+                            <div class="audit-item">
+                                <span class="audit-time">08:30 AM</span>
+                                <span class="audit-action"><span class="audit-user">System</span> completed daily backup</span>
+                                <span class="compliance-badge">✓ Logged</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Complete Audit Trail</div>
+                <div class="mockup-desc">HIPAA-compliant logging of all document access and actions</div>
+            </div>
+        </div>
+
+        <!-- Screen 5: Embed Configuration -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <div class="screen-logo-icon"></div>
+                                Widget Setup
+                            </div>
+                            <div class="screen-nav">
+                                <span class="nav-item active">Embed</span>
+                                <span class="nav-item">API</span>
+                                <span class="nav-item">Docs</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div class="settings-section">
+                                <div class="settings-title">📦 EMBED CODE</div>
+                                <div style="background: #1a1a2a; border-radius: 6px; padding: 0.6rem; font-family: monospace; font-size: 0.55rem; color: var(--accent-1);">
+                                    &lt;script src="https://cdn.securedoc.io/widget.js"&gt;&lt;/script&gt;<br>
+                                    &lt;div id="securedoc-search" data-key="sk_live_***"&gt;&lt;/div&gt;
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <div class="settings-title">⚙️ WIDGET OPTIONS</div>
+                                <div class="setting-row">
+                                    <span>Enable PHI Masking</span>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-row">
+                                    <span>Require MFA for Access</span>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-row">
+                                    <span>Auto-expire Sessions (30 min)</span>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-row">
+                                    <span>Watermark Downloads</span>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <div class="settings-title">🎨 THEME</div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <div style="width: 24px; height: 24px; background: linear-gradient(135deg, #0a0a0f, #1a1a2a); border-radius: 4px; border: 2px solid var(--accent-1);"></div>
+                                    <div style="width: 24px; height: 24px; background: linear-gradient(135deg, #f5f7fa, #ffffff); border-radius: 4px; border: 1px solid var(--border);"></div>
+                                    <div style="width: 24px; height: 24px; background: linear-gradient(135deg, #1e3a5f, #2d5a87); border-radius: 4px; border: 1px solid var(--border);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Easy Website Embedding</div>
+                <div class="mockup-desc">Configure and embed the search widget with one line of code</div>
+            </div>
+        </div>
+
+        <!-- Screen 6: Compliance Settings -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <div class="screen-logo-icon"></div>
+                                Compliance Center
+                            </div>
+                            <div class="screen-nav">
+                                <span class="compliance-badge" style="background: rgba(0, 212, 170, 0.2);">✓ Compliant</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div class="settings-section">
+                                <div class="settings-title">🏥 HIPAA COMPLIANCE</div>
+                                <div class="doc-item" style="margin-bottom: 0.4rem;">
+                                    <div style="color: var(--accent-1);">✓</div>
+                                    <div class="doc-info">
+                                        <div class="doc-title">PHI Encryption (AES-256)</div>
+                                        <div class="doc-meta">All data encrypted at rest and in transit</div>
+                                    </div>
+                                </div>
+                                <div class="doc-item" style="margin-bottom: 0.4rem;">
+                                    <div style="color: var(--accent-1);">✓</div>
+                                    <div class="doc-info">
+                                        <div class="doc-title">Access Controls & Audit Logs</div>
+                                        <div class="doc-meta">Role-based access with complete audit trail</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <div class="settings-title">🔒 ISO 27001 CONTROLS</div>
+                                <div class="doc-item" style="margin-bottom: 0.4rem;">
+                                    <div style="color: var(--accent-1);">✓</div>
+                                    <div class="doc-info">
+                                        <div class="doc-title">Information Security Policy</div>
+                                        <div class="doc-meta">Last reviewed: Dec 2024</div>
+                                    </div>
+                                </div>
+                                <div class="doc-item">
+                                    <div style="color: var(--accent-1);">✓</div>
+                                    <div class="doc-info">
+                                        <div class="doc-title">Risk Assessment Complete</div>
+                                        <div class="doc-meta">Next audit: Mar 2025</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Compliance Dashboard</div>
+                <div class="mockup-desc">Monitor HIPAA and ISO 27001 compliance status in real-time</div>
+            </div>
+        </div>
+
+        <!-- Screen 7: Admin Analytics -->
+        <div class="mockup-card">
+            <div class="laptop-frame">
+                <div class="laptop-notch"></div>
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="screen-logo">
+                                <div class="screen-logo-icon"></div>
+                                Analytics
+                            </div>
+                            <div class="screen-nav">
+                                <span class="chip active">This Week</span>
+                                <span class="chip">Month</span>
+                            </div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-card">
+                                <div class="stat-value">12,847</div>
+                                <div class="stat-label">Total Searches</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">284</div>
+                                <div class="stat-label">Active Users</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">99.9%</div>
+                                <div class="stat-label">Uptime</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Security Incidents</div>
+                            </div>
+                        </div>
+                        <div class="settings-title">📊 SEARCH VOLUME (7 DAYS)</div>
+                        <div class="chart-placeholder">
+                            <div class="chart-bar" style="height: 45%;"></div>
+                            <div class="chart-bar" style="height: 65%;"></div>
+                            <div class="chart-bar" style="height: 55%;"></div>
+                            <div class="chart-bar" style="height: 80%;"></div>
+                            <div class="chart-bar" style="height: 70%;"></div>
+                            <div class="chart-bar" style="height: 90%;"></div>
+                            <div class="chart-bar" style="height: 75%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.5rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <div class="mockup-info">
+                <div class="mockup-title">Admin Analytics Dashboard</div>
+                <div class="mockup-desc">Monitor usage, performance, and security metrics</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Generated by <span>Blueprint Brain</span> ✨
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.textContent = '☀️';
+                text.textContent = 'Light';
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const siblings = this.parentElement.querySelectorAll('.chip');
+                siblings.forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
