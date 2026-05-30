@@ -1,0 +1,2787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucent — Architecture Blueprint</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsla(240, 100%, 74%, 0.15) 0px, transparent 50%),
+                            radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.1) 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.05) 0px, transparent 50%),
+                            radial-gradient(at 80% 50%, hsla(340, 100%, 76%, 0.1) 0px, transparent 50%),
+                            radial-gradient(at 0% 100%, hsla(269, 100%, 77%, 0.1) 0px, transparent 50%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px var(--primary-glow);
+            --neu-light: rgba(255, 255, 255, 0.05);
+            --neu-dark: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #eeeef5;
+            --text: #1a1a2e;
+            --text-secondary: #4a4a5a;
+            --text-muted: #8a8a9a;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsla(240, 100%, 74%, 0.08) 0px, transparent 50%),
+                            radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.06) 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.03) 0px, transparent 50%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
+            --neu-light: rgba(255, 255, 255, 0.9);
+            --neu-dark: rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-15px) rotate(2deg);
+            }
+            66% {
+                transform: translateY(-8px) rotate(-1deg);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% {
+                border-color: var(--primary);
+                box-shadow: 0 0 20px var(--primary-glow);
+            }
+            50% {
+                border-color: var(--accent);
+                box-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-mesh);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            opacity: 0.03;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            bottom: 20%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        .shape:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            top: 40%;
+            left: 60%;
+            animation-delay: -15s;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--card-bg);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 
+                4px 4px 8px var(--neu-dark),
+                -2px -2px 6px var(--neu-light);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                6px 6px 12px var(--neu-dark),
+                -3px -3px 8px var(--neu-light);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+            box-shadow: 
+                2px 2px 4px var(--neu-dark),
+                -1px -1px 3px var(--neu-light);
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-bg);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .diagram-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .cost-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cost-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cost-card.recommended {
+            border: 2px solid var(--primary);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        .cost-card.recommended::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 2rem;
+            font-size: 0.625rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .cost-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .cost-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cloud-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--card-bg);
+        }
+
+        .cost-price {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .cost-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .cost-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .cost-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--gradient-1);
+            transition: width 1s ease;
+            width: 0;
+        }
+
+        .cost-details {
+            margin-top: 1rem;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+        }
+
+        .collapsible {
+            cursor: pointer;
+        }
+
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible-header:hover {
+            background: var(--glass-bg);
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.open .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .collapsible.open .collapsible-content {
+            max-height: 2000px;
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .tech-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .tech-category {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .tech-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        .tech-badge {
+            padding: 0.25rem 0.75rem;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tech-reasoning {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 10px);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translateX(-7px);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .timeline-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .timeline-label {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-cost {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .security-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .security-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .severity-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .severity-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .severity-low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .compliance-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .radial-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+
+        .radial-progress svg {
+            transform: rotate(-90deg);
+        }
+
+        .radial-progress circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .radial-progress .bg {
+            stroke: var(--bg-tertiary);
+        }
+
+        .radial-progress .progress {
+            stroke: var(--primary);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .radial-progress .value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .mockups-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .mockup-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .device-frame {
+            padding: 1rem;
+            background: var(--bg-tertiary);
+        }
+
+        .device-frame.phone {
+            max-width: 280px;
+            margin: 0 auto;
+            border-radius: 24px;
+            padding: 0.5rem;
+        }
+
+        .device-frame.phone .screen {
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 9/19;
+        }
+
+        .device-frame.laptop {
+            border-radius: 12px 12px 0 0;
+        }
+
+        .device-frame.laptop .screen {
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+        }
+
+        .screen {
+            background: var(--bg);
+            position: relative;
+        }
+
+        .screen-content {
+            padding: 1rem;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .mini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .mini-nav {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .mini-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .mini-dot.red { background: #ef4444; }
+        .mini-dot.yellow { background: #f59e0b; }
+        .mini-dot.green { background: #10b981; }
+
+        .mini-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mini-chart {
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .mini-bar {
+            flex: 1;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            transition: height 0.3s ease;
+        }
+
+        .mini-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mini-list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem;
+            background: var(--card-bg);
+            border-radius: 4px;
+            font-size: 0.625rem;
+        }
+
+        .mini-avatar {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+        }
+
+        .mini-btn {
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.5rem;
+        }
+
+        .mini-input {
+            width: 100%;
+            padding: 0.25rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            font-size: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .mini-status {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .mockup-info {
+            padding: 1.5rem;
+        }
+
+        .mockup-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .mockup-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .env-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .env-table th,
+        .env-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .env-table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .env-table tr:hover {
+            background: var(--card-bg);
+        }
+
+        .env-name {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+
+        .env-required {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .env-required.yes {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .env-required.no {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-toggle:hover {
+            border-color: var(--primary);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            margin-top: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--card-bg);
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.info {
+            border-color: var(--primary);
+        }
+
+        .toast-icon {
+            font-size: 1.25rem;
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--card-border);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 4rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .mockups-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-stack-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .loading-shimmer {
+            background: linear-gradient(90deg, var(--card-bg) 25%, var(--glass-bg) 50%, var(--card-bg) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .api-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .api-header:hover {
+            background: var(--card-bg);
+        }
+
+        .api-method {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .api-method.get { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .api-method.post { background: rgba(99, 102, 241, 0.2); color: var(--primary); }
+        .api-method.put { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .api-method.delete { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        .api-endpoint {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+        }
+
+        .api-body {
+            padding: 1.5rem;
+            border-top: 1px solid var(--card-border);
+            display: none;
+        }
+
+        .api-card.open .api-body {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Lucent</div>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#costs">Costs</a></li>
+                <li><a href="#stack">Stack</a></li>
+                <li><a href="#scalability">Scalability</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#mockups">Mockups</a></li>
+                <li><a href="#env">Environment</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero visible" id="hero">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Production Ready Architecture
+            </div>
+            <h1>Lucent</h1>
+            <p>A comprehensive mobile ride-sharing platform architecture with real-time tracking, intelligent matching, and seamless payments.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="showToast('Downloading blueprint...', 'info')">
+                    📥 Download Blueprint
+                </button>
+                <a href="#architecture" class="btn btn-secondary">
+                    🔍 Explore Architecture
+                </a>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" data-count="7">0</div>
+                    <div class="stat-label">Backend Services</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" data-count="14">0</div>
+                    <div class="stat-label">Tech Stack Decisions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$361</div>
+                    <div class="stat-label">Monthly Starting Cost</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">99.9%</div>
+                    <div class="stat-label">Target Availability</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview">
+            <div class="section-header">
+                <h2>Executive Summary</h2>
+                <p>Lucent is a mobile-first ride-sharing platform designed for scalability, real-time performance, and exceptional user experience.</p>
+            </div>
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1.5rem;">Project Overview</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Primary Component</h4>
+                        <p style="color: var(--text-secondary);">Mobile App (iOS/Android) - React Native based cross-platform application for riders and drivers</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Target Users</h4>
+                        <p style="color: var(--text-secondary);">General consumers seeking ride-sharing services with production-ready scaling requirements</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Recommended Cloud</h4>
+                        <p style="color: var(--text-secondary);">AWS - Best balance of managed services, real-time capabilities, and ecosystem integration</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Key Features</h4>
+                        <p style="color: var(--text-secondary);">Real-time tracking, intelligent matching, surge pricing, push notifications, payment processing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <div class="section-header">
+                <h2>System Architecture</h2>
+                <p>Comprehensive view of the Lucent platform's microservices architecture and data flows.</p>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="arch-diagram">Architecture</button>
+                <button class="tab-btn" data-tab="sequence-diagram">Sequence Flow</button>
+                <button class="tab-btn" data-tab="er-diagram">Data Model</button>
+                <button class="tab-btn" data-tab="deploy-diagram">Deployment</button>
+            </div>
+
+            <div class="tab-content active" id="arch-diagram">
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart TD
+    subgraph Frontend["Frontend Layer"]
+        MA["Mobile App\n(iOS/Android)"]
+    end
+    
+    subgraph Backend["Backend Services"]
+        AG["API Gateway"]
+        AS["Auth Service"]
+        RS["Ride Service"]
+        MS["Matching Service"]
+        NS["Notification Service"]
+        LS["Location Service"]
+        PS["Payment Service"]
+    end
+    
+    subgraph Data["Data Layer"]
+        PG[("PostgreSQL\nMain Database")]
+        RD[("Redis\nCache & Sessions")]
+        MQ["Message Queue\n(RabbitMQ)"]
+    end
+    
+    subgraph External["External Services"]
+        MAP["Maps API\n(Google/Mapbox)"]
+        PAY["Payment Gateway\n(Stripe)"]
+        PUSH["Push Notifications\n(FCM/APNs)"]
+    end
+    
+    MA -->|"HTTPS/WSS"| AG
+    AG --> AS
+    AG --> RS
+    AG --> LS
+    AS --> PG
+    AS --> RD
+    RS --> MS
+    RS --> PG
+    MS --> MQ
+    MS --> RD
+    LS --> RD
+    LS --> MAP
+    RS --> PS
+    PS --> PAY
+    NS --> MQ
+    NS --> PUSH
+    MQ --> NS
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="sequence-diagram">
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+    participant D as Driver App
+    participant R as Rider App
+    participant AG as API Gateway
+    participant AS as Auth Service
+    participant RS as Ride Service
+    participant MS as Matching Service
+    participant LS as Location Service
+    participant NS as Notification Service
+    
+    Note over D,NS: Driver Authentication Flow
+    D->>AG: Login Request
+    AG->>AS: Validate Credentials
+    activate AS
+    AS-->>AG: JWT Token
+    deactivate AS
+    AG-->>D: Auth Success + Token
+    
+    Note over D,NS: Driver Goes Online
+    D->>AG: Set Status Online
+    AG->>LS: Update Driver Location
+    activate LS
+    LS-->>AG: Location Confirmed
+    deactivate LS
+    
+    Note over R,NS: Rider Requests Ride
+    R->>AG: Request Ride (pickup, destination)
+    AG->>RS: Create Ride Request
+    activate RS
+    RS->>MS: Find Nearby Drivers
+    activate MS
+    MS->>LS: Get Available Drivers
+    LS-->>MS: Driver List
+    MS-->>RS: Best Match Driver
+    deactivate MS
+    RS->>NS: Notify Driver
+    deactivate RS
+    NS-->>D: Push: New Ride Request
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="er-diagram">
+                <div class="diagram-container">
+                    <div class="mermaid">
+erDiagram
+    USER {
+        uuid id PK
+        string email UK
+        string phone UK
+        string password_hash
+        string first_name
+        string last_name
+        enum role
+        boolean is_verified
+        timestamp created_at
+    }
+    
+    DRIVER_PROFILE {
+        uuid id PK
+        uuid user_id FK
+        string license_number UK
+        string vehicle_make
+        string vehicle_model
+        string vehicle_plate UK
+        enum status
+        float rating
+        int total_rides
+    }
+    
+    RIDE {
+        uuid id PK
+        uuid rider_id FK
+        uuid driver_id FK
+        point pickup_location
+        point dropoff_location
+        enum status
+        decimal fare_amount
+        float distance_km
+        int duration_minutes
+    }
+    
+    PAYMENT {
+        uuid id PK
+        uuid ride_id FK
+        uuid user_id FK
+        decimal amount
+        string currency
+        enum status
+        string stripe_payment_id
+    }
+    
+    USER ||--o| DRIVER_PROFILE : "has"
+    USER ||--o{ RIDE : "requests"
+    DRIVER_PROFILE ||--o{ RIDE : "accepts"
+    RIDE ||--|| PAYMENT : "has"
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="deploy-diagram">
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart LR
+    subgraph Users["End Users"]
+        IOS["iOS App"]
+        AND["Android App"]
+    end
+    
+    subgraph CDN["CDN Layer"]
+        CF["CloudFlare\nCDN & DDoS"]
+    end
+    
+    subgraph AWS["AWS Cloud"]
+        subgraph PublicSubnet["Public Subnet"]
+            ALB["Application\nLoad Balancer"]
+        end
+        
+        subgraph PrivateSubnet["Private Subnet - EKS"]
+            APIGW["API Gateway\nPod x3"]
+            AUTH["Auth Service\nPod x2"]
+            RIDE["Ride Service\nPod x3"]
+        end
+        
+        subgraph DataSubnet["Data Subnet"]
+            RDS[("RDS PostgreSQL\nMulti-AZ")]
+            REDIS[("ElastiCache\nRedis")]
+        end
+    end
+    
+    IOS --> CF
+    AND --> CF
+    CF --> ALB
+    ALB --> APIGW
+    APIGW --> AUTH
+    APIGW --> RIDE
+    AUTH --> RDS
+    AUTH --> REDIS
+    RIDE --> RDS
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="costs">
+            <div class="section-header">
+                <h2>Cloud Cost Analysis</h2>
+                <p>Comprehensive pricing comparison across major cloud providers for the Lucent platform.</p>
+            </div>
+
+            <div class="cost-comparison">
+                <div class="cost-card recommended">
+                    <div class="cost-header">
+                        <div class="cloud-icon">☁️</div>
+                        <div>
+                            <div style="font-weight: 600;">Amazon Web Services</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Best for ride-sharing apps</div>
+                        </div>
+                    </div>
+                    <div class="cost-price">$361.07<span>/month</span></div>
+                    <div class="cost-bar">
+                        <div class="cost-bar-fill" data-width="50"></div>
+                    </div>
+                    <div class="collapsible">
+                        <div class="collapsible-header">
+                            <span>View Breakdown</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="cost-details">
+                                <div class="cost-item"><span>EC2 t3.medium (API x2)</span><span>$60.74</span></div>
+                                <div class="cost-item"><span>EC2 t3.small (WebSocket x2)</span><span>$30.37</span></div>
+                                <div class="cost-item"><span>RDS PostgreSQL</span><span>$49.64</span></div>
+                                <div class="cost-item"><span>ElastiCache Redis</span><span>$24.82</span></div>
+                                <div class="cost-item"><span>Application Load Balancer</span><span>$5.84</span></div>
+                                <div class="cost-item"><span>S3 Storage (50GB)</span><span>$1.15</span></div>
+                                <div class="cost-item"><span>Data Transfer (500GB)</span><span>$44.91</span></div>
+                                <div class="cost-item"><span>SQS (10M requests)</span><span>$3.60</span></div>
+                                <div class="cost-item" style="border-top: 2px solid var(--primary); margin-top: 0.5rem; padding-top: 0.5rem;">
+                                    <span style="font-weight: 600;">Hidden Costs</span><span style="font-weight: 600;">+$140</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cost-card">
+                    <div class="cost-header">
+                        <div class="cloud-icon">🔷</div>
+                        <div>
+                            <div style="font-weight: 600;">Microsoft Azure</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Enterprise integration</div>
+                        </div>
+                    </div>
+                    <div class="cost-price">$414.77<span>/month</span></div>
+                    <div class="cost-bar">
+                        <div class="cost-bar-fill" data-width="57"></div>
+                    </div>
+                    <div class="collapsible">
+                        <div class="collapsible-header">
+                            <span>View Breakdown</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="cost-details">
+                                <div class="cost-item"><span>VM B2ms (API x2)</span><span>$66.58</span></div>
+                                <div class="cost-item"><span>VM B2s (WebSocket x2)</span><span>$33.29</span></div>
+                                <div class="cost-item"><span>Azure DB PostgreSQL</span><span>$52.56</span></div>
+                                <div class="cost-item"><span>Azure Cache Redis</span><span>$32.12</span></div>
+                                <div class="cost-item"><span>Load Balancer Standard</span><span>$18.25</span></div>
+                                <div class="cost-item"><span>Blob Storage (50GB)</span><span>$0.90</span></div>
+                                <div class="cost-item"><span>Bandwidth Out (500GB)</span><span>$43.07</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cost-card">
+                    <div class="cost-header">
+                        <div class="cloud-icon">🌐</div>
+                        <div>
+                            <div style="font-weight: 600;">Google Cloud Platform</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Maps integration</div>
+                        </div>
+                    </div>
+                    <div class="cost-price">$459.27<span>/month</span></div>
+                    <div class="cost-bar">
+                        <div class="cost-bar-fill" data-width="63"></div>
+                    </div>
+                    <div class="collapsible">
+                        <div class="collapsible-header">
+                            <span>View Breakdown</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="cost-details">
+                                <div class="cost-item"><span>GCE e2-standard-2 (API x2)</span><span>$54.90</span></div>
+                                <div class="cost-item"><span>GCE e2-medium (WebSocket x2)</span><span>$27.45</span></div>
+                                <div class="cost-item"><span>Cloud SQL PostgreSQL</span><span>$43.80</span></div>
+                                <div class="cost-item"><span>Memorystore Redis</span><span>$23.36</span></div>
+                                <div class="cost-item"><span>Cloud Load Balancing</span><span>$5.84</span></div>
+                                <div class="cost-item"><span>Cloud Storage (50GB)</span><span>$1.00</span></div>
+                                <div class="cost-item"><span>Network Egress (500GB)</span><span>$39.92</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cost-card">
+                    <div class="cost-header">
+                        <div class="cloud-icon">🔴</div>
+                        <div>
+                            <div style="font-weight: 600;">Hetzner Cloud</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Budget option (self-managed)</div>
+                        </div>
+                    </div>
+                    <div class="cost-price">$725.98<span>/month</span></div>
+                    <div class="cost-bar">
+                        <div class="cost-bar-fill" data-width="100"></div>
+                    </div>
+                    <div class="collapsible">
+                        <div class="collapsible-header">
+                            <span>View Breakdown</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="cost-details">
+                                <div class="cost-item"><span>CX41 (API x2)</span><span>$4.96</span></div>
+                                <div class="cost-item"><span>CX31 (WebSocket x2)</span><span>$2.63</span></div>
+                                <div class="cost-item"><span>CX31 (PostgreSQL)</span><span>$1.31</span></div>
+                                <div class="cost-item"><span>CX21 (Redis)</span><span>$0.73</span></div>
+                                <div class="cost-item"><span>Load Balancer LB11</span><span>$6.06</span></div>
+                                <div class="cost-item" style="border-top: 2px solid var(--warning); margin-top: 0.5rem; padding-top: 0.5rem;">
+                                    <span style="font-weight: 600; color: var(--warning);">DevOps Overhead</span><span style="font-weight: 600;">+$500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stack">
+            <div class="section-header">
+                <h2>Technology Stack</h2>
+                <p>Carefully selected technologies optimized for mobile ride-sharing applications.</p>
+            </div>
+
+            <div class="tech-stack-grid">
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Mobile Framework</div>
+                            <div class="tech-name">React Native</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">Cross-platform development maximizes reach while minimizing effort. Large ecosystem and hiring pool make it sustainable for production.</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>Flutter</strong> - Excellent UI performance with Skia rendering</div>
+                            <div class="dropdown-item"><strong>Native (Swift + Kotlin)</strong> - Best possible performance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Backend</div>
+                            <div class="tech-name">Node.js + Fastify</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">Excellent performance for API requests with low latency. TypeScript ecosystem aligns with React Native for code sharing.</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>Express</strong> - Simpler learning curve</div>
+                            <div class="dropdown-item"><strong>Go + Gin</strong> - Superior performance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Database</div>
+                            <div class="tech-name">PostgreSQL 16</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">ACID compliance and PostGIS extension for geospatial queries critical for ride-sharing. JSONB for flexible user data storage.</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>MongoDB</strong> - Flexible schema for rapid iteration</div>
+                            <div class="dropdown-item"><strong>PlanetScale</strong> - Serverless scaling</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Cache</div>
+                            <div class="tech-name">Redis 7</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">Essential for API caching, session management, rate limiting, and pub/sub for real-time driver location updates.</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>Memcached</strong> - Simpler operation</div>
+                            <div class="dropdown-item"><strong>DragonflyDB</strong> - Better performance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Push Notifications</div>
+                            <div class="tech-name">Firebase Cloud Messaging</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">De facto standard for push notifications. Handles both iOS (APNs) and Android natively, free at scale.</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>OneSignal</strong> - Better analytics dashboard</div>
+                            <div class="dropdown-item"><strong>AWS SNS + Pinpoint</strong> - Multi-channel</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <div>
+                            <div class="tech-category">Observability</div>
+                            <div class="tech-name">Datadog</div>
+                        </div>
+                        <span class="tech-badge">Chosen</span>
+                    </div>
+                    <p class="tech-reasoning">APM, logs, and metrics in one platform with excellent mobile SDK for Real User Monitoring (RUM).</p>
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>View Alternatives</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item"><strong>CloudWatch + X-Ray</strong> - Native AWS</div>
+                            <div class="dropdown-item"><strong>Sentry + Prometheus</strong> - Cost-effective</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scalability">
+            <div class="section-header">
+                <h2>Scalability Roadmap</h2>
+                <p>Progressive scaling strategy from MVP to 500K+ monthly active users.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-label">0 - 1K MAU</div>
+                        <div class="timeline-title">MVP Launch</div>
+                        <div class="timeline-cost">$361/month</div>
+                        <div style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            <p>• Single EC2 t3.medium instance with auto-restart</p>
+                            <p>• WebSocket via AWS API Gateway</p>
+                            <p>• RDS PostgreSQL db.t3.small with PostGIS</p>
+                            <p>• Redis ElastiCache t3.micro for sessions</p>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 1rem;">
+                            <div class="progress-fill" style="width: 10%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            <span>50-100 concurrent drivers</span>
+                            <span>100-500 daily rides</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-label">1K - 50K MAU</div>
+                        <div class="timeline-title">Growth Phase</div>
+                        <div class="timeline-cost">$1,850/month</div>
+                        <div style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            <p>• ECS Fargate with 2-6 task auto-scaling</p>
+                            <p>• RDS db.r6g.large with read replicas</p>
+                            <p>• Redis cluster mode (3 nodes)</p>
+                            <p>• AWS Location Service for routing</p>
+                            <p>• Amazon Kinesis for location streaming</p>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 1rem;">
+                            <div class="progress-fill" style="width: 40%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            <span>500-2,500 concurrent drivers</span>
+                            <span>2K-15K daily rides</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-label">50K - 500K MAU</div>
+                        <div class="timeline-title">Scale Phase</div>
+                        <div class="timeline-cost">$12,500/month</div>
+                        <div style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            <p>• Microservices decomposition</p>
+                            <p>• Aurora PostgreSQL Serverless v2</p>
+                            <p>• CQRS with DynamoDB for reads</p>
+                            <p>• AWS IoT Core for 50K+ connections</p>
+                            <p>• Multi-region active-active deployment</p>
+                            <p>• AWS Global Accelerator</p>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 1rem;">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            <span>10K-50K concurrent drivers</span>
+                            <span>50K-300K daily rides</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="security">
+            <div class="section-header">
+                <h2>Security Assessment</h2>
+                <p>Comprehensive security analysis and compliance readiness evaluation.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <div class="compliance-card">
+                    <div class="radial-progress">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="327" stroke-dashoffset="278" data-percent="15"></circle>
+                        </svg>
+                        <div class="value">15%</div>
+                    </div>
+                    <h4>SOC2</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">12 gaps identified</p>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="radial-progress">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="327" stroke-dashoffset="294" data-percent="10"></circle>
+                        </svg>
+                        <div class="value">10%</div>
+                    </div>
+                    <h4>HIPAA</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">15 gaps identified</p>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="radial-progress">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="327" stroke-dashoffset="288" data-percent="12"></circle>
+                        </svg>
+                        <div class="value">12%</div>
+                    </div>
+                    <h4>GDPR</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">14 gaps identified</p>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="radial-progress">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="327" stroke-dashoffset="301" data-percent="8"></circle>
+                        </svg>
+                        <div class="value">8%</div>
+                    </div>
+                    <h4>PCI-DSS</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">18 gaps identified</p>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1.5rem;">Security Findings</h3>
+            <div class="security-grid">
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-high">High</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">AUTH-001</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">No Authentication Service Defined</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">The architecture lacks any defined authentication service, identity provider, or user management component.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Implement OAuth 2.0/OIDC with Auth0, Firebase Auth, or AWS Cognito.
+                    </div>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-high">High</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">DATA-001</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">No Backend Data Storage Architecture</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">Critical backend components are missing from the architecture documentation.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Define backend data storage with encryption at rest using SQLCipher or Realm.
+                    </div>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-high">High</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">NET-001</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">No API Gateway Defined</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">Impossible to assess network security controls, API security, or traffic management.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Implement API gateway with rate limiting, request validation, and WAF protection.
+                    </div>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-medium">Medium</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">AUTH-002</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">Missing Multi-Factor Authentication</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">No MFA mechanism documented. Mobile apps are frequent targets for credential stuffing.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Integrate TOTP, SMS OTP, or biometric authentication (Face ID/Touch ID).
+                    </div>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-medium">Medium</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">NET-002</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">Certificate Pinning Not Specified</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">Without certificate pinning, the app is vulnerable to man-in-the-middle attacks.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Implement public key pinning with backup pins for rotation.
+                    </div>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-header">
+                        <span class="severity-badge severity-medium">Medium</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">DATA-003</span>
+                    </div>
+                    <h4 style="margin: 1rem 0 0.5rem;">No Data Encryption Strategy</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">Encryption mechanisms for data at rest and in transit are not specified.</p>
+                    <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.875rem;">
+                        <strong style="color: var(--success);">Recommendation:</strong> Implement AES-256 for local storage, TLS 1.3 for all API communications.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mockups">
+            <div class="section-header">
+                <h2>Screen Mockups</h2>
+                <p>Interactive previews of the Lucent mobile application screens.</p>
+            </div>
+
+            <div class="tabs" style="margin-bottom: 2rem;">
+                <button class="tab-btn active" data-filter="all">All Screens</button>
+                <button class="tab-btn" data-filter="rider">Rider App</button>
+                <button class="tab-btn" data-filter="driver">Driver App</button>
+                <button class="tab-btn" data-filter="admin">Admin Panel</button>
+            </div>
+
+            <div class="mockups-gallery">
+                <!-- Login Screen -->
+                <div class="mockup-card" data-category="rider driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content" style="background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0f 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">🚗</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;">Lucent</div>
+                                <div class="mini-input" style="margin-bottom: 0.5rem; padding: 0.5rem;">📧 Email address</div>
+                                <div class="mini-input" style="margin-bottom: 1rem; padding: 0.5rem;">🔒 Password</div>
+                                <div class="mini-btn" style="width: 100%; padding: 0.5rem; text-align: center;">Sign In</div>
+                                <div style="margin-top: 1rem; font-size: 0.5rem; color: var(--text-muted);">Don't have an account? Sign up</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Login Screen</div>
+                        <div class="mockup-desc">JWT + Refresh Token authentication with biometric support</div>
+                    </div>
+                </div>
+
+                <!-- Rider Dashboard -->
+                <div class="mockup-card" data-category="rider">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">☰</span>
+                                    <span style="font-size: 0.625rem; font-weight: 600;">Lucent</span>
+                                    <span style="font-size: 0.625rem;">👤</span>
+                                </div>
+                                <div style="background: var(--bg-tertiary); height: 100px; border-radius: 8px; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: var(--text-muted);">
+                                    🗺️ Map View
+                                </div>
+                                <div class="mini-card">
+                                    <div style="font-size: 0.5rem; color: var(--text-muted); margin-bottom: 0.25rem;">Where to?</div>
+                                    <div class="mini-input" style="font-size: 0.5rem;">🔍 Enter destination</div>
+                                </div>
+                                <div class="mini-list">
+                                    <div class="mini-list-item">
+                                        <span>📍</span>
+                                        <span>Home - 123 Main St</span>
+                                    </div>
+                                    <div class="mini-list-item">
+                                        <span>💼</span>
+                                        <span>Work - 456 Office Blvd</span>
+                                    </div>
+                                    <div class="mini-list-item">
+                                        <span>⭐</span>
+                                        <span>Airport Terminal 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Rider Home</div>
+                        <div class="mockup-desc">Google Maps integration with saved locations</div>
+                    </div>
+                </div>
+
+                <!-- Ride Request -->
+                <div class="mockup-card" data-category="rider">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div style="background: var(--bg-tertiary); height: 80px; border-radius: 8px; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: var(--text-muted);">
+                                    🗺️ Route Preview
+                                </div>
+                                <div class="mini-card">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span>📍 Current Location</span>
+                                        <span style="color: var(--success);">●</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.5rem;">
+                                        <span>🎯 Downtown Mall</span>
+                                        <span>3.2 mi</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.25rem; margin-bottom: 0.5rem;">
+                                    <div class="mini-card" style="flex: 1; text-align: center; border: 1px solid var(--primary);">
+                                        <div style="font-size: 0.625rem;">🚗</div>
+                                        <div style="font-size: 0.5rem; font-weight: 600;">Standard</div>
+                                        <div style="font-size: 0.5rem; color: var(--success);">$12.50</div>
+                                    </div>
+                                    <div class="mini-card" style="flex: 1; text-align: center;">
+                                        <div style="font-size: 0.625rem;">🚙</div>
+                                        <div style="font-size: 0.5rem; font-weight: 600;">Premium</div>
+                                        <div style="font-size: 0.5rem; color: var(--success);">$18.00</div>
+                                    </div>
+                                    <div class="mini-card" style="flex: 1; text-align: center;">
+                                        <div style="font-size: 0.625rem;">👥</div>
+                                        <div style="font-size: 0.5rem; font-weight: 600;">Pool</div>
+                                        <div style="font-size: 0.5rem; color: var(--success);">$8.00</div>
+                                    </div>
+                                </div>
+                                <div class="mini-btn" style="width: 100%; text-align: center; padding: 0.5rem;">Request Ride</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Ride Selection</div>
+                        <div class="mockup-desc">Surge pricing calculation with ride options</div>
+                    </div>
+                </div>
+
+                <!-- Driver Dashboard -->
+                <div class="mockup-card" data-category="driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">Driver Mode</span>
+                                    <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                        <span class="mini-status" style="background: var(--success);"></span>
+                                        <span style="font-size: 0.5rem;">Online</span>
+                                    </div>
+                                </div>
+                                <div style="background: var(--bg-tertiary); height: 90px; border-radius: 8px; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: var(--text-muted);">
+                                    🗺️ Nearby Requests
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.25rem; margin-bottom: 0.5rem;">
+                                    <div class="mini-card" style="text-align: center;">
+                                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--success);">$127.50</div>
+                                        <div style="font-size: 0.5rem; color: var(--text-muted);">Today's Earnings</div>
+                                    </div>
+                                    <div class="mini-card" style="text-align: center;">
+                                        <div style="font-size: 0.75rem; font-weight: 700;">8</div>
+                                        <div style="font-size: 0.5rem; color: var(--text-muted);">Trips Completed</div>
+                                    </div>
+                                </div>
+                                <div class="mini-card" style="border: 1px solid var(--warning);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-size: 0.5rem; font-weight: 600;">New Request!</div>
+                                            <div style="font-size: 0.5rem; color: var(--text-muted);">0.3 mi away • $15.00</div>
+                                        </div>
+                                        <div class="mini-btn">Accept</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Driver Dashboard</div>
+                        <div class="mockup-desc">Real-time ride requests via WebSocket</div>
+                    </div>
+                </div>
+
+                <!-- Active Ride -->
+                <div class="mockup-card" data-category="rider driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div style="background: var(--bg-tertiary); height: 100px; border-radius: 8px; margin-bottom: 0.5rem; position: relative;">
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem;">🚗</div>
+                                    <div style="position: absolute; bottom: 0.25rem; left: 0.25rem; background: var(--bg); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.5rem;">
+                                        ETA: 3 min
+                                    </div>
+                                </div>
+                                <div class="mini-card">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <div class="mini-avatar"></div>
+                                        <div>
+                                            <div style="font-size: 0.5rem; font-weight: 600;">John D.</div>
+                                            <div style="font-size: 0.5rem; color: var(--warning);">⭐ 4.9 (1,234 trips)</div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.5rem; color: var(--text-muted);">Toyota Camry • ABC 1234</div>
+                                </div>
+                                <div style="display: flex; gap: 0.25rem;">
+                                    <div class="mini-btn" style="flex: 1; text-align: center; background: var(--bg-tertiary); color: var(--text);">📞 Call</div>
+                                    <div class="mini-btn" style="flex: 1; text-align: center; background: var(--bg-tertiary); color: var(--text);">💬 Message</div>
+                                    <div class="mini-btn" style="flex: 1; text-align: center; background: var(--danger);">✕ Cancel</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Active Ride</div>
+                        <div class="mockup-desc">Real-time location tracking every 5 seconds</div>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div class="mockup-card" data-category="admin">
+                    <div class="device-frame laptop">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem;">
+                                    <div class="mini-nav">
+                                        <div class="mini-dot red"></div>
+                                        <div class="mini-dot yellow"></div>
+                                        <div class="mini-dot green"></div>
+                                    </div>
+                                    <span style="font-size: 0.5rem;">Lucent Admin</span>
+                                    <span></span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <div style="width: 60px; background: var(--bg-tertiary); border-radius: 4px; padding: 0.25rem;">
+                                        <div style="font-size: 0.375rem; padding: 0.25rem; background: var(--primary); border-radius: 2px; margin-bottom: 0.25rem;">Dashboard</div>
+                                        <div style="font-size: 0.375rem; padding: 0.25rem;">Rides</div>
+                                        <div style="font-size: 0.375rem; padding: 0.25rem;">Drivers</div>
+                                        <div style="font-size: 0.375rem; padding: 0.25rem;">Users</div>
+                                        <div style="font-size: 0.375rem; padding: 0.25rem;">Payments</div>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.25rem; margin-bottom: 0.5rem;">
+                                            <div class="mini-card" style="text-align: center;">
+                                                <div style="font-size: 0.5rem; font-weight: 700; color: var(--success);">$12.5K</div>
+                                                <div style="font-size: 0.375rem;">Revenue</div>
+                                            </div>
+                                            <div class="mini-card" style="text-align: center;">
+                                                <div style="font-size: 0.5rem; font-weight: 700;">2,847</div>
+                                                <div style="font-size: 0.375rem;">Rides</div>
+                                            </div>
+                                            <div class="mini-card" style="text-align: center;">
+                                                <div style="font-size: 0.5rem; font-weight: 700;">156</div>
+                                                <div style="font-size: 0.375rem;">Drivers</div>
+                                            </div>
+                                            <div class="mini-card" style="text-align: center;">
+                                                <div style="font-size: 0.5rem; font-weight: 700;">4.8</div>
+                                                <div style="font-size: 0.375rem;">Avg Rating</div>
+                                            </div>
+                                        </div>
+                                        <div class="mini-card">
+                                            <div style="font-size: 0.375rem; margin-bottom: 0.25rem;">Rides This Week</div>
+                                            <div class="mini-chart">
+                                                <div class="mini-bar" style="height: 60%;"></div>
+                                                <div class="mini-bar" style="height: 80%;"></div>
+                                                <div class="mini-bar" style="height: 45%;"></div>
+                                                <div class="mini-bar" style="height: 90%;"></div>
+                                                <div class="mini-bar" style="height: 70%;"></div>
+                                                <div class="mini-bar" style="height: 85%;"></div>
+                                                <div class="mini-bar" style="height: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Admin Dashboard</div>
+                        <div class="mockup-desc">Real-time analytics with Mixpanel integration</div>
+                    </div>
+                </div>
+
+                <!-- Payment History -->
+                <div class="mockup-card" data-category="rider">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">←</span>
+                                    <span style="font-size: 0.625rem; font-weight: 600;">Payment History</span>
+                                    <span></span>
+                                </div>
+                                <div class="mini-card" style="margin-bottom: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 0.75rem;">💳</span>
+                                            <div>
+                                                <div style="font-size: 0.5rem; font-weight: 600;">•••• 4242</div>
+                                                <div style="font-size: 0.375rem; color: var(--text-muted);">Default</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 0.5rem; color: var(--primary);">Edit</span>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.5rem; font-weight: 600; margin-bottom: 0.5rem;">Recent Transactions</div>
+                                <div class="mini-list">
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                            <span>🚗</span>
+                                            <div>
+                                                <div style="font-size: 0.5rem;">Downtown Mall</div>
+                                                <div style="font-size: 0.375rem; color: var(--text-muted);">Today, 2:30 PM</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 0.5rem; font-weight: 600;">-$12.50</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                            <span>🚗</span>
+                                            <div>
+                                                <div style="font-size: 0.5rem;">Airport Terminal 1</div>
+                                                <div style="font-size: 0.375rem; color: var(--text-muted);">Yesterday</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 0.5rem; font-weight: 600;">-$28.00</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                            <span>🚗</span>
+                                            <div>
+                                                <div style="font-size: 0.5rem;">Office Building</div>
+                                                <div style="font-size: 0.375rem; color: var(--text-muted);">2 days ago</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 0.5rem; font-weight: 600;">-$8.75</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Payment History</div>
+                        <div class="mockup-desc">Stripe integration with secure card storage</div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="mockup-card" data-category="rider driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">←</span>
+                                    <span style="font-size: 0.625rem; font-weight: 600;">Notifications</span>
+                                    <span style="font-size: 0.5rem; color: var(--primary);">Clear All</span>
+                                </div>
+                                <div class="mini-card" style="border-left: 2px solid var(--success);">
+                                    <div style="font-size: 0.5rem; font-weight: 600;">Ride Completed! ✓</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted);">Your trip to Downtown Mall has ended. Rate your driver!</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted); margin-top: 0.25rem;">2 min ago</div>
+                                </div>
+                                <div class="mini-card" style="border-left: 2px solid var(--primary);">
+                                    <div style="font-size: 0.5rem; font-weight: 600;">Driver Arriving</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted);">John D. is 3 minutes away in a Toyota Camry</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted); margin-top: 0.25rem;">15 min ago</div>
+                                </div>
+                                <div class="mini-card" style="border-left: 2px solid var(--warning);">
+                                    <div style="font-size: 0.5rem; font-weight: 600;">🎉 Special Offer!</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted);">Get 20% off your next 3 rides. Use code: LUCENT20</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted); margin-top: 0.25rem;">1 hour ago</div>
+                                </div>
+                                <div class="mini-card">
+                                    <div style="font-size: 0.5rem; font-weight: 600;">Payment Processed</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted);">$28.00 charged to •••• 4242</div>
+                                    <div style="font-size: 0.375rem; color: var(--text-muted); margin-top: 0.25rem;">Yesterday</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Notification Center</div>
+                        <div class="mockup-desc">FCM/APNs push notification integration</div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="mockup-card" data-category="rider driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div style="text-align: center; margin-bottom: 1rem;">
+                                    <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-1); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>
+                                    <div style="font-size: 0.75rem; font-weight: 600;">Sarah Johnson</div>
+                                    <div style="font-size: 0.5rem; color: var(--text-muted);">sarah.j@email.com</div>
+                                    <div style="font-size: 0.5rem; color: var(--warning); margin-top: 0.25rem;">⭐ 4.95 Rating</div>
+                                </div>
+                                <div class="mini-list">
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>📱 Phone</span>
+                                        <span style="color: var(--text-muted);">+1 (555) 123-4567</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🏠 Home Address</span>
+                                        <span style="color: var(--text-muted);">123 Main St</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>💼 Work Address</span>
+                                        <span style="color: var(--text-muted);">456 Office Blvd</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🔐 Security</span>
+                                        <span style="color: var(--primary);">→</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🔔 Notifications</span>
+                                        <span style="color: var(--primary);">→</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">User Profile</div>
+                        <div class="mockup-desc">Secure profile with iOS Keychain storage</div>
+                    </div>
+                </div>
+
+                <!-- Driver Earnings -->
+                <div class="mockup-card" data-category="driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">←</span>
+                                    <span style="font-size: 0.625rem; font-weight: 600;">Earnings</span>
+                                    <span style="font-size: 0.5rem;">This Week ▼</span>
+                                </div>
+                                <div class="mini-card" style="text-align: center; background: var(--gradient-1); margin-bottom: 0.5rem;">
+                                    <div style="font-size: 1rem; font-weight: 700; color: white;">$847.50</div>
+                                    <div style="font-size: 0.5rem; color: rgba(255,255,255,0.8);">Total Earnings</div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.25rem; margin-bottom: 0.5rem;">
+                                    <div class="mini-card" style="text-align: center;">
+                                        <div style="font-size: 0.625rem; font-weight: 700;">42</div>
+                                        <div style="font-size: 0.375rem; color: var(--text-muted);">Trips</div>
+                                    </div>
+                                    <div class="mini-card" style="text-align: center;">
+                                        <div style="font-size: 0.625rem; font-weight: 700;">18.5h</div>
+                                        <div style="font-size: 0.375rem; color: var(--text-muted);">Online</div>
+                                    </div>
+                                    <div class="mini-card" style="text-align: center;">
+                                        <div style="font-size: 0.625rem; font-weight: 700;">$45.81</div>
+                                        <div style="font-size: 0.375rem; color: var(--text-muted);">Per Hour</div>
+                                    </div>
+                                </div>
+                                <div class="mini-card">
+                                    <div style="font-size: 0.5rem; margin-bottom: 0.25rem;">Daily Breakdown</div>
+                                    <div class="mini-chart" style="height: 30px;">
+                                        <div class="mini-bar" style="height: 70%;"></div>
+                                        <div class="mini-bar" style="height: 85%;"></div>
+                                        <div class="mini-bar" style="height: 60%;"></div>
+                                        <div class="mini-bar" style="height: 100%;"></div>
+                                        <div class="mini-bar" style="height: 90%;"></div>
+                                        <div class="mini-bar" style="height: 75%;"></div>
+                                        <div class="mini-bar" style="height: 95%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Driver Earnings</div>
+                        <div class="mockup-desc">Real-time earnings with Stripe Connect</div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="mockup-card" data-category="rider driver">
+                    <div class="device-frame phone">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem; padding: 0.75rem;">
+                                    <span style="font-size: 0.625rem;">←</span>
+                                    <span style="font-size: 0.625rem; font-weight: 600;">Settings</span>
+                                    <span></span>
+                                </div>
+                                <div class="mini-list">
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🌙 Dark Mode</span>
+                                        <div style="width: 24px; height: 14px; background: var(--primary); border-radius: 7px; position: relative;">
+                                            <div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🔔 Push Notifications</span>
+                                        <div style="width: 24px; height: 14px; background: var(--primary); border-radius: 7px; position: relative;">
+                                            <div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>📍 Location Services</span>
+                                        <span style="color: var(--success);">Always</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🔐 Face ID</span>
+                                        <div style="width: 24px; height: 14px; background: var(--primary); border-radius: 7px; position: relative;">
+                                            <div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🌐 Language</span>
+                                        <span style="color: var(--text-muted);">English</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>📄 Terms of Service</span>
+                                        <span style="color: var(--primary);">→</span>
+                                    </div>
+                                    <div class="mini-list-item" style="justify-content: space-between;">
+                                        <span>🔒 Privacy Policy</span>
+                                        <span style="color: var(--primary);">→</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Settings</div>
+                        <div class="mockup-desc">Comprehensive app configuration</div>
+                    </div>
+                </div>
+
+                <!-- Data Table Admin -->
+                <div class="mockup-card" data-category="admin">
+                    <div class="device-frame laptop">
+                        <div class="screen">
+                            <div class="screen-content">
+                                <div class="mini-header" style="margin: -1rem -1rem 0.5rem;">
+                                    <div class="mini-nav">
+                                        <div class="mini-dot red"></div>
+                                        <div class="mini-dot yellow"></div>
+                                        <div class="mini-dot green"></div>
+                                    </div>
+                                    <span style="font-size: 0.5rem;">Driver Management</span>
+                                    <span></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <div class="mini-input" style="width: 100px; font-size: 0.375rem;">🔍 Search drivers...</div>
+                                    <div class="mini-btn" style="font-size: 0.375rem;">+ Add Driver</div>
+                                </div>
+                                <div style="background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 0.25rem; padding: 0.25rem; background: var(--bg-secondary); font-size: 0.375rem; font-weight: 600;">
+                                        <span>Driver</span>
+                                        <span>Status</span>
+                                        <span>Rating</span>
+                                        <span>Trips</span>
+                                        <span>Actions</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 0.25rem; padding: 0.25rem; font-size: 0.375rem; border-bottom: 1px solid var(--card-border);">
+                                        <span style="display: flex; align-items: center; gap: 0.25rem;"><div class="mini-avatar" style="width: 12px; height: 12px;"></div>John D.</span>
+                                        <span style="color: var(--success);">● Online</span>
+                                        <span>⭐ 4.9</span>
+                                        <span>1,234</span>
+                                        <span style="color: var(--primary);">Edit</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 0.25rem; padding: 0.25rem; font-size: 0.375rem; border-bottom: 1px solid var(--card-border);">
+                                        <span style="display: flex; align-items: center; gap: 0.25rem;"><div class="mini-avatar" style="width: 12px; height: 12px;"></div>Sarah M.</span>
+                                        <span style="color: var(--warning);">● Busy</span>
+                                        <span>⭐ 4.8</span>
+                                        <span>892</span>
+                                        <span style="color: var(--primary);">Edit</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 0.25rem; padding: 0.25rem; font-size: 0.375rem;">
+                                        <span style="display: flex; align-items: center; gap: 0.25rem;"><div class="mini-avatar" style="width: 12px; height: 12px;"></div>Mike R.</span>
+                                        <span style="color: var(--text-muted);">● Offline</span>
+                                        <span>⭐ 4.7</span>
+                                        <span>567</span>
+                                        <span style="color: var(--primary);">Edit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-info">
+                        <div class="mockup-title">Driver Management</div>
+                        <div class="mockup-desc">Admin data table with sorting and filtering</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="api">
+            <div class="
