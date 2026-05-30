@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="800" fill="#F8FAFC"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1E293B" text-anchor="middle">Consumer Application Architecture</text>
+  <text x="600" y="65" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">Medium Scale • Budget: Under $1000/month</text>
+  
+  <!-- Layer Labels -->
+  <text x="30" y="130" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" font-weight="bold">FRONTEND</text>
+  <text x="30" y="310" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" font-weight="bold">GATEWAY</text>
+  <text x="30" y="470" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" font-weight="bold">SERVICES</text>
+  <text x="30" y="670" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" font-weight="bold">DATA LAYER</text>
+  
+  <!-- End Consumers / Users -->
+  <g>
+    <rect x="200" y="100" width="180" height="70" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="290" y="130" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Web App</text>
+    <text x="290" y="150" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">React/Vue SPA</text>
+  </g>
+  
+  <g>
+    <rect x="510" y="100" width="180" height="70" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="600" y="130" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Mobile App</text>
+    <text x="600" y="150" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">iOS / Android</text>
+  </g>
+  
+  <g>
+    <rect x="820" y="100" width="180" height="70" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="910" y="130" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Third Party</text>
+    <text x="910" y="150" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">API Consumers</text>
+  </g>
+  
+  <!-- CDN -->
+  <g>
+    <rect x="100" y="200" width="140" height="50" rx="8" ry="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+    <text x="170" y="230" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="bold">CDN</text>
+  </g>
+  
+  <!-- API Gateway / Load Balancer -->
+  <g>
+    <rect x="400" y="270" width="400" height="80" rx="8" ry="8" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
+    <text x="600" y="300" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="bold">API Gateway / Load Balancer</text>
+    <text x="600" y="325" font-family="Arial, sans-serif" font-size="11" fill="#E9D5FF" text-anchor="middle">Rate Limiting • Auth • SSL Termination</text>
+  </g>
+  
+  <!-- Services Layer -->
+  <g>
+    <rect x="120" y="420" width="200" height="100" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="220" y="455" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Auth Service</text>
+    <text x="220" y="475" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">JWT • OAuth 2.0</text>
+    <text x="220" y="495" font-family="Arial, sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">~$50/mo</text>
+  </g>
+  
+  <g>
+    <rect x="360" y="420" width="200" height="100" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="460" y="455" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Core API</text>
+    <text x="460" y="475" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Business Logic</text>
+    <text x="460" y="495" font-family="Arial, sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">~$200/mo</text>
+  </g>
+  
+  <g>
+    <rect x="600" y="420" width="200" height="100" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="700" y="455" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Worker Service</text>
+    <text x="700" y="475" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Background Jobs</text>
+    <text x="700" y="495" font-family="Arial, sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">~$100/mo</text>
+  </g>
+  
+  <g>
+    <rect x="840" y="420" width="200" height="100" rx="8" ry="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+    <text x="940" y="455" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Notification</text>
+    <text x="940" y="475" font-family="Arial, sans-serif" font-size="11" fill="#DBEAFE" text-anchor="middle">Email • Push • SMS</text>
+    <text x="940" y="495" font-family="Arial, sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">~$75/mo</text>
+  </g>
+  
+  <!-- Message Queue -->
+  <g>
+    <rect x="500" y="560" width="200" height="60" rx="8" ry="8" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+    <text x="600" y="595" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">Message Queue</text>
+  </g>
+  
+  <!-- Data Layer -->
+  <g>
+    <rect x="120" y="650" width="200" height="100" rx="8" ry="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+    <text x="220" y="685" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">PostgreSQL</text>
+    <text x="220" y="705" font-family="Arial, sans-serif" font-size="11" fill="#D1FAE5" text-anchor="middle">Primary Database</text>
+    <text x="220" y="725" font-family="Arial, sans-serif" font-size="10" fill="#A7F3D0" text-anchor="middle">~$150/mo</text>
+  </g>
+  
+  <g>
+    <rect x="360" y="650" width="200" height="100" rx="8" ry="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+    <text x="460" y="685" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Redis</text>
+    <text x="460" y="705" font-family="Arial, sans-serif" font-size="11" fill="#D1FAE5" text-anchor="middle">Cache • Sessions</text>
+    <text x="460" y="725" font-family="Arial, sans-serif" font-size="10" fill="#A7F3D0" text-anchor="middle">~$50/mo</text>
+  </g>
+  
+  <g>
+    <rect x="600" y="650" width="200" height="100" rx="8" ry="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+    <text x="700" y="685" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Object Storage</text>
+    <text x="700" y="705" font-family="Arial, sans-serif" font-size="11" fill="#D1FAE5" text-anchor="middle">S3 Compatible</text>
+    <text x="700" y="725" font-family="Arial, sans-serif" font-size="10" fill="#A7F3D0" text-anchor="middle">~$50/mo</text>
+  </g>
+  
+  <g>
+    <rect x="840" y="650" width="200" height="100" rx="8" ry="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+    <text x="940" y="685" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Logging</text>
+    <text x="940" y="705" font-family="Arial, sans-serif" font-size="11" fill="#D1FAE5" text-anchor="middle">Monitoring • Alerts</text>
+    <text x="940" y="725" font-family="Arial, sans-serif" font-size="10" fill="#A7F3D0" text-anchor="middle">~$75/mo</text>
+  </g>
+  
+  <!-- Connections: Frontend to Gateway -->
+  <line x1="290" y1="170" x2="500" y2="270" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="170" x2="600" y2="270" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="910" y1="170" x2="700" y2="270" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- CDN to Web App -->
+  <line x1="170" y1="200" x2="250" y2="170" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Gateway to Services -->
+  <line x1="450" y1="350" x2="220" y2="420" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="520" y1="350" x2="460" y2="420" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="680" y1="350" x2="700" y2="420" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="750" y1="350" x2="940" y2="420" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Services to Message Queue -->
+  <line x1="460" y1="520" x2="550" y2="560" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="700" y1="520" x2="650" y2="560" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Services to Data Layer -->
+  <line x1="220" y1="520" x2="220" y2="650" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="460" y1="520" x2="380" y2="650" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="460" y1="520" x2="460" y2="650" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="700" y1="520" x2="700" y2="650" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="940" y1="520" x2="940" y2="650" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Budget Summary -->
+  <rect x="950" y="270" width="200" height="80" rx="8" ry="8" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+  <text x="1050" y="295" font-family="Arial, sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">Est. Monthly Cost</text>
+  <text x="1050" y="325" font-family="Arial, sans-serif" font-size="22" fill="#10B981" text-anchor="middle" font-weight="bold">~$750/mo</text>
+</svg>
