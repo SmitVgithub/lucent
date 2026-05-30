@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucent - UI Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent-blue: #6366f1;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --glow-blue: rgba(99, 102, 241, 0.4);
+            --glow-cyan: rgba(6, 182, 212, 0.4);
+        }
+
+        .light-mode {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.4s ease;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.6rem 1.2rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px var(--glow-cyan);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .mockup-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mockup-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mockup-card:hover .device-frame {
+            transform: scale(1.02);
+            box-shadow: 0 25px 80px rgba(99, 102, 241, 0.3), 0 0 40px var(--glow-blue);
+        }
+
+        .device-frame {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .phone-frame {
+            max-width: 280px;
+            margin: 0 auto;
+            border-radius: 32px;
+            padding: 8px;
+            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+        }
+
+        .phone-frame .device-frame {
+            border-radius: 24px;
+        }
+
+        .laptop-frame {
+            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+            border-radius: 12px 12px 0 0;
+            padding: 12px 12px 0;
+        }
+
+        .laptop-frame .device-frame {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .laptop-base {
+            height: 16px;
+            background: linear-gradient(145deg, #3a3a4a, #2a2a3a);
+            border-radius: 0 0 8px 8px;
+            margin: 0 -20px;
+        }
+
+        .screen-content {
+            background: var(--bg-primary);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-frame .screen-content {
+            min-height: 480px;
+        }
+
+        .laptop-frame .screen-content {
+            min-height: 320px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.3);
+        }
+
+        .notch {
+            width: 80px;
+            height: 24px;
+            background: #000;
+            border-radius: 0 0 16px 16px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .mockup-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .mockup-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        /* Screen UI Components */
+        .app-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .app-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .input-field {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+
+        .list-item:hover {
+            background: var(--bg-card);
+        }
+
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .chart-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .nav-item.active {
+            color: var(--accent-cyan);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer span {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .mockup-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .mockup-grid { grid-template-columns: 1fr; gap: 2rem; }
+            header { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header>
+        <div class="logo">✦ Lucent</div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-text">Dark</span>
+        </button>
+    </header>
+
+    <p class="subtitle">Illuminating your workflow with seamless API integration and beautiful interfaces</p>
+
+    <div class="mockup-grid">
+        <!-- Screen 1: Login -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content" style="display: flex; flex-direction: column;">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="text-align: center; margin-bottom: 40px;">
+                                <div style="font-size: 3rem; margin-bottom: 8px;">✦</div>
+                                <h2 style="font-size: 1.5rem; font-weight: 700;">Welcome to Lucent</h2>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px;">Sign in to continue</p>
+                            </div>
+                            <input class="input-field" placeholder="Email address" style="font-size: 14px;">
+                            <input class="input-field" placeholder="Password" type="password" style="font-size: 14px;">
+                            <button class="btn" style="margin-top: 8px;">Sign In</button>
+                            <button class="btn btn-outline" style="margin-top: 12px;">Create Account</button>
+                            <div style="text-align: center; margin-top: 24px;">
+                                <span style="color: var(--text-secondary); font-size: 0.8rem;">or continue with</span>
+                                <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px;">
+                                    <div style="width: 48px; height: 48px; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center;">G</div>
+                                    <div style="width: 48px; height: 48px; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Authentication</h3>
+            <p class="mockup-desc">Secure login with OAuth integration via api-server</p>
+        </div>
+
+        <!-- Screen 2: Dashboard -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">
+                            <div>
+                                <p style="font-size: 0.75rem; color: var(--text-secondary);">Good morning</p>
+                                <p class="app-title">Alex Chen</p>
+                            </div>
+                            <div class="avatar"></div>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                                <div class="card">
+                                    <div class="stat-value">2.4k</div>
+                                    <div class="stat-label">API Requests</div>
+                                    <div class="chart-bar" style="width: 80%; margin-top: 8px;"></div>
+                                </div>
+                                <div class="card">
+                                    <div class="stat-value" style="background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text;">99.9%</div>
+                                    <div class="stat-label">Uptime</div>
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+                                        <div class="status-dot"></div>
+                                        <span style="font-size: 0.7rem; color: var(--accent-green);">Healthy</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <span style="font-weight: 600; font-size: 0.9rem;">Active Services</span>
+                                    <span style="font-size: 0.75rem; color: var(--accent-cyan);">View all</span>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0;">
+                                    <div class="icon-circle" style="background: rgba(99, 102, 241, 0.2);">🔌</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 500;">API Server</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);">api.lucent.io</div>
+                                    </div>
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0;">
+                                    <div class="icon-circle" style="background: rgba(6, 182, 212, 0.2);">🖥️</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 500;">Frontend App</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);">app.lucent.io</div>
+                                    </div>
+                                    <div class="status-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item active">🏠<span>Home</span></div>
+                            <div class="nav-item">📊<span>Analytics</span></div>
+                            <div class="nav-item">⚡<span>Services</span></div>
+                            <div class="nav-item">⚙️<span>Settings</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Main Dashboard</h3>
+            <p class="mockup-desc">Real-time metrics from frontend → api-server requests</p>
+        </div>
+
+        <!-- Screen 3: API Explorer -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">
+                            <span class="app-title">API Explorer</span>
+                            <span style="font-size: 0.75rem; padding: 4px 10px; background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border-radius: 20px;">Connected</span>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div class="card" style="margin-bottom: 12px;">
+                                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                    <span style="padding: 4px 8px; background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border-radius: 6px; font-size: 0.7rem; font-weight: 600;">GET</span>
+                                    <span style="font-size: 0.85rem; color: var(--text-secondary);">/api/v1/users</span>
+                                </div>
+                                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 0.7rem; color: var(--accent-cyan);">
+                                    <div>{"status": "success",</div>
+                                    <div>&nbsp;"data": [...],</div>
+                                    <div>&nbsp;"count": 142}</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 12px;">Recent Endpoints</div>
+                            <div class="list-item">
+                                <span style="padding: 4px 8px; background: rgba(99, 102, 241, 0.2); color: var(--accent-blue); border-radius: 6px; font-size: 0.65rem; font-weight: 600;">POST</span>
+                                <span style="font-size: 0.8rem; flex: 1;">/api/v1/auth/login</span>
+                                <span style="font-size: 0.7rem; color: var(--text-secondary);">45ms</span>
+                            </div>
+                            <div class="list-item">
+                                <span style="padding: 4px 8px; background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border-radius: 6px; font-size: 0.65rem; font-weight: 600;">GET</span>
+                                <span style="font-size: 0.8rem; flex: 1;">/api/v1/dashboard</span>
+                                <span style="font-size: 0.7rem; color: var(--text-secondary);">23ms</span>
+                            </div>
+                            <div class="list-item">
+                                <span style="padding: 4px 8px; background: rgba(236, 72, 153, 0.2); color: var(--accent-pink); border-radius: 6px; font-size: 0.65rem; font-weight: 600;">PUT</span>
+                                <span style="font-size: 0.8rem; flex: 1;">/api/v1/settings</span>
+                                <span style="font-size: 0.7rem; color: var(--text-secondary);">67ms</span>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">🏠<span>Home</span></div>
+                            <div class="nav-item active">📊<span>Analytics</span></div>
+                            <div class="nav-item">⚡<span>Services</span></div>
+                            <div class="nav-item">⚙️<span>Settings</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">API Explorer</h3>
+            <p class="mockup-desc">Test and monitor api-server endpoints in real-time</p>
+        </div>
+
+        <!-- Screen 4: Service Monitor -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">
+                            <span class="app-title">Services</span>
+                            <span style="font-size: 1.2rem;">+</span>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-green);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">API Server</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Production • us-east-1</div>
+                                    </div>
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div style="display: flex; gap: 16px; margin-top: 12px;">
+                                    <div><span style="font-size: 1rem; font-weight: 600;">12ms</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Latency</span></div>
+                                    <div><span style="font-size: 1rem; font-weight: 600;">1.2k</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Req/min</span></div>
+                                    <div><span style="font-size: 1rem; font-weight: 600;">0</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Errors</span></div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-cyan);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">Frontend App</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Production • CDN</div>
+                                    </div>
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div style="display: flex; gap: 16px; margin-top: 12px;">
+                                    <div><span style="font-size: 1rem; font-weight: 600;">89</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Score</span></div>
+                                    <div><span style="font-size: 1rem; font-weight: 600;">2.1s</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Load</span></div>
+                                    <div><span style="font-size: 1rem; font-weight: 600;">847</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Users</span></div>
+                                </div>
+                            </div>
+                            <div class="card" style="border-left: 3px solid var(--accent-purple);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">Mobile App</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">v2.4.1 • iOS & Android</div>
+                                    </div>
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div style="display: flex; gap: 16px; margin-top: 12px;">
+                                    <div><span style="font-size: 1rem; font-weight: 600;">4.8</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Rating</span></div>
+                                    <div><span style="font-size: 1rem; font-weight: 600;">12k</span><br><span style="font-size: 0.65rem; color: var(--text-secondary);">Installs</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">🏠<span>Home</span></div>
+                            <div class="nav-item">📊<span>Analytics</span></div>
+                            <div class="nav-item active">⚡<span>Services</span></div>
+                            <div class="nav-item">⚙️<span>Settings</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Service Monitor</h3>
+            <p class="mockup-desc">Track all Lucent components health status</p>
+        </div>
+
+        <!-- Screen 5: Settings -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">
+                            <span class="app-title">Settings</span>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                                <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));"></div>
+                                <div>
+                                    <div style="font-weight: 600;">Alex Chen</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">alex@lucent.io</div>
+                                    <div style="font-size: 0.7rem; color: var(--accent-cyan); margin-top: 4px;">Pro Plan</div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 12px;">
+                                <div class="list-item" style="padding: 8px 0; border-bottom: 1px solid var(--glass-border);">
+                                    <span>🔔</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">Notifications</span>
+                                    <div style="width: 44px; height: 24px; background: var(--accent-green); border-radius: 12px; position: relative;"><div style="width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div></div>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0; border-bottom: 1px solid var(--glass-border);">
+                                    <span>🌙</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">Dark Mode</span>
+                                    <div style="width: 44px; height: 24px; background: var(--accent-green); border-radius: 12px; position: relative;"><div style="width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div></div>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0;">
+                                    <span>🔐</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">Two-Factor Auth</span>
+                                    <span style="color: var(--text-secondary);">›</span>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="list-item" style="padding: 8px 0; border-bottom: 1px solid var(--glass-border);">
+                                    <span>🔑</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">API Keys</span>
+                                    <span style="color: var(--text-secondary);">›</span>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0; border-bottom: 1px solid var(--glass-border);">
+                                    <span>👥</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">Team Members</span>
+                                    <span style="color: var(--text-secondary);">›</span>
+                                </div>
+                                <div class="list-item" style="padding: 8px 0;">
+                                    <span>💳</span>
+                                    <span style="flex: 1; font-size: 0.9rem;">Billing</span>
+                                    <span style="color: var(--text-secondary);">›</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">🏠<span>Home</span></div>
+                            <div class="nav-item">📊<span>Analytics</span></div>
+                            <div class="nav-item">⚡<span>Services</span></div>
+                            <div class="nav-item active">⚙️<span>Settings</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Settings & Profile</h3>
+            <p class="mockup-desc">Manage account, API keys, and team access</p>
+        </div>
+
+        <!-- Screen 6: Admin Analytics (Desktop) -->
+        <div class="mockup-card" style="grid-column: span 2;">
+            <div class="laptop-frame">
+                <div class="device-frame">
+                    <div class="screen-content laptop-frame">
+                        <div style="display: flex; height: 100%;">
+                            <!-- Sidebar -->
+                            <div style="width: 200px; background: rgba(0,0,0,0.3); padding: 20px; border-right: 1px solid var(--glass-border);">
+                                <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">✦ Lucent</div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    <div style="padding: 10px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;">📊 Analytics</div>
+                                    <div style="padding: 10px 12px; font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">🏠 Dashboard</div>
+                                    <div style="padding: 10px 12px; font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">⚡ Services</div>
+                                    <div style="padding: 10px 12px; font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">👥 Users</div>
+                                    <div style="padding: 10px 12px; font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">⚙️ Settings</div>
+                                </div>
+                            </div>
+                            <!-- Main Content -->
+                            <div style="flex: 1; padding: 20px; overflow: hidden;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <div>
+                                        <h2 style="font-size: 1.3rem; font-weight: 600;">Analytics Overview</h2>
+                                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Real-time metrics from all Lucent services</p>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <span style="padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.8rem;">Last 7 days</span>
+                                        <span style="padding: 6px 12px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-radius: 8px; font-size: 0.8rem;">Export</span>
+                                    </div>
+                                </div>
+                                <!-- Stats Row -->
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+                                    <div class="card">
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Total Requests</div>
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-cyan);">1.2M</div>
+                                        <div style="font-size: 0.7rem; color: var(--accent-green);">↑ 12.5%</div>
+                                    </div>
+                                    <div class="card">
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Avg Response</div>
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-green);">23ms</div>
+                                        <div style="font-size: 0.7rem; color: var(--accent-green);">↓ 8.2%</div>
+                                    </div>
+                                    <div class="card">
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Active Users</div>
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-purple);">8,429</div>
+                                        <div style="font-size: 0.7rem; color: var(--accent-green);">↑ 24.1%</div>
+                                    </div>
+                                    <div class="card">
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Error Rate</div>
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-pink);">0.02%</div>
+                                        <div style="font-size: 0.7rem; color: var(--accent-green);">↓ 0.5%</div>
+                                    </div>
+                                </div>
+                                <!-- Chart Area -->
+                                <div class="card" style="height: 140px; display: flex; flex-direction: column;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                        <span style="font-size: 0.85rem; font-weight: 600;">Request Volume</span>
+                                        <div style="display: flex; gap: 12px; font-size: 0.7rem;">
+                                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: var(--accent-blue); border-radius: 50%;"></span> API Server</span>
+                                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: var(--accent-cyan); border-radius: 50%;"></span> Frontend</span>
+                                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: var(--accent-purple); border-radius: 50%;"></span> Mobile</span>
+                                        </div>
+                                    </div>
+                                    <div style="flex: 1; display: flex; align-items: flex-end; gap: 8px; padding-bottom: 8px;">
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 60px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 40px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 70px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 35px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 55px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 45px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 80px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 50px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 65px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 55px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 90px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 60px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                                            <div style="height: 75px; background: linear-gradient(180deg, var(--accent-blue), transparent); border-radius: 4px 4px 0 0;"></div>
+                                            <div style="height: 48px; background: linear-gradient(180deg, var(--accent-cyan), transparent); border-radius: 4px 4px 0 0;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+            <h3 class="mockup-title">Admin Analytics Panel</h3>
+            <p class="mockup-desc">Comprehensive dashboard showing frontend → api-server user request flows and system metrics</p>
+        </div>
+
+        <!-- Screen 7: Notifications -->
+        <div class="mockup-card">
+            <div class="phone-frame">
+                <div class="device-frame">
+                    <div class="screen-content">
+                        <div class="notch"></div>
+                        <div class="status-bar" style="padding-top: 32px;">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">
+                            <span class="app-title">Notifications</span>
+                            <span style="font-size: 0.75rem; color: var(--accent-cyan);">Mark all read</span>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-green);">
+                                <div style="display: flex; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">✓</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 600;">Deployment Successful</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">API Server v2.4.0 deployed to production</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 6px;">2 min ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-cyan);">
+                                <div style="display: flex; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; background: rgba(6, 182, 212, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">📊</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 600;">Traffic Spike Detected</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Frontend App receiving 3x normal traffic</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 6px;">15 min ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-purple);">
+                                <div style="display: flex; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">👤</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 600;">New Team Member</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Sarah joined as Developer</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 6px;">1 hour ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="opacity: 0.6;">
+                                <div style="display: flex; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; background: var(--bg-card); border-radius: 10px; display: flex; align-items: center; justify-content: center;">🔔</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 0.85rem; font-weight: 600;">Weekly Report Ready</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Your analytics summary is available</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 6px;">Yesterday</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">🏠<span>Home</span></div>
+                            <div class="nav-item">📊<span>Analytics</span></div>
+                            <div class="nav-item">⚡<span>Services</span></div>
+                            <div class="nav-item">⚙️<span>Settings</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Notifications</h3>
+            <p class="mockup-desc">Real-time alerts from all Lucent services</p>
+        </div>
+    </div>
+
+    <footer>
+        Generated by <span>Blueprint Brain</span> ✦
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (document.body.classList.contains('light-mode')) {
+                icon.textContent = '☀️';
+                text.textContent = 'Light';
+            } else {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add hover sound effect simulation with visual feedback
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.zIndex = '10';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.zIndex = '1';
+            });
+        });
+    </script>
+</body>
+</html>
