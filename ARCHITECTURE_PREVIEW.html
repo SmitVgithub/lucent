@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucent - App Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.03);
+            --text-primary: #1a1a2e;
+            --text-secondary: #666680;
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            padding: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mockup-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mockup-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .mockup-card:hover .device-frame {
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.3), 0 0 40px var(--accent-glow);
+        }
+
+        .device-frame {
+            background: #1a1a2e;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 28px;
+            background: #0a0a0f;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .device-frame::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #2a2a3e;
+            border-radius: 10px;
+            z-index: 11;
+        }
+
+        .screen {
+            background: linear-gradient(180deg, #1e1e2e 0%, #12121a 100%);
+            border-radius: 30px;
+            height: 580px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen-content {
+            padding: 50px 20px 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .mockup-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .mockup-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Screen Components */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 20px;
+            font-size: 12px;
+            color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 5;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border: none;
+            border-radius: 12px;
+            padding: 14px 28px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--glass-border);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #fff;
+            width: 100%;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 18, 26, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px 28px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .nav-item.active {
+            color: #6366f1;
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .mockups-grid {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .logo {
+                font-size: 2rem;
+            }
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <h1 class="logo">Lucent</h1>
+        <p class="subtitle">Your personal wellness companion — track habits, meditate, and achieve your health goals with beautiful simplicity</p>
+    </header>
+
+    <main class="mockups-grid">
+        <!-- Screen 1: Welcome/Login -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content" style="display: flex; flex-direction: column; justify-content: center; text-align: center; padding-top: 80px;">
+                        <div style="font-size: 64px; margin-bottom: 20px; animation: float 3s ease-in-out infinite;">✨</div>
+                        <h2 style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px;">Lucent</h2>
+                        <p style="color: #a0a0b0; margin-bottom: 40px; padding: 0 20px;">Illuminate your path to wellness</p>
+                        <div style="padding: 0 20px;">
+                            <input class="input-field" placeholder="Email address" type="email">
+                            <input class="input-field" placeholder="Password" type="password">
+                            <button class="btn" style="margin-top: 8px;">Sign In</button>
+                            <button class="btn btn-outline" style="margin-top: 12px;">Create Account</button>
+                            <p style="color: #666; margin-top: 24px; font-size: 13px;">Or continue with</p>
+                            <div style="display: flex; gap: 12px; margin-top: 16px; justify-content: center;">
+                                <div class="glass-card" style="padding: 12px 24px; margin: 0;">🍎</div>
+                                <div class="glass-card" style="padding: 12px 24px; margin: 0;">G</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Welcome Screen</h3>
+            <p class="mockup-desc">Clean onboarding with social sign-in options</p>
+        </div>
+
+        <!-- Screen 2: Dashboard -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="app-header">
+                            <div>
+                                <p style="color: #a0a0b0; font-size: 14px;">Good morning,</p>
+                                <h2 class="app-title">Sarah ☀️</h2>
+                            </div>
+                            <div class="avatar">S</div>
+                        </div>
+                        <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.2));">
+                            <p style="font-size: 13px; color: #a0a0b0;">Today's Progress</p>
+                            <h3 style="font-size: 28px; font-weight: 700; margin: 8px 0;">78%</h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%;"></div>
+                            </div>
+                            <p style="font-size: 12px; color: #a0a0b0; margin-top: 8px;">5 of 6 habits completed</p>
+                        </div>
+                        <h4 style="margin: 20px 0 12px; font-size: 16px;">Today's Habits</h4>
+                        <div class="glass-card" style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 44px; height: 44px; background: rgba(34, 197, 94, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">💧</div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 600;">Drink Water</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">6/8 glasses</p>
+                            </div>
+                            <div style="color: #22c55e;">✓</div>
+                        </div>
+                        <div class="glass-card" style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 44px; height: 44px; background: rgba(99, 102, 241, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">🧘</div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 600;">Meditate</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">10 min session</p>
+                            </div>
+                            <div style="color: #22c55e;">✓</div>
+                        </div>
+                        <div class="glass-card" style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 44px; height: 44px; background: rgba(236, 72, 153, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">🏃</div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 600;">Exercise</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">30 min workout</p>
+                            </div>
+                            <div style="color: #666;">○</div>
+                        </div>
+                    </div>
+                    <div class="nav-bar">
+                        <div class="nav-item active"><div class="nav-icon">🏠</div>Home</div>
+                        <div class="nav-item"><div class="nav-icon">📊</div>Stats</div>
+                        <div class="nav-item"><div class="nav-icon">🧘</div>Meditate</div>
+                        <div class="nav-item"><div class="nav-icon">👤</div>Profile</div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Dashboard</h3>
+            <p class="mockup-desc">Daily overview with habit tracking progress</p>
+        </div>
+
+        <!-- Screen 3: Meditation -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen" style="background: linear-gradient(180deg, #1a1a3e 0%, #0f0f1a 100%);">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content" style="text-align: center;">
+                        <div class="app-header">
+                            <span style="font-size: 20px;">←</span>
+                            <span style="font-weight: 600;">Meditation</span>
+                            <span style="font-size: 20px;">♡</span>
+                        </div>
+                        <div style="width: 180px; height: 180px; margin: 30px auto; border-radius: 50%; background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%); display: flex; align-items: center; justify-content: center; animation: pulse 3s infinite;">
+                            <div style="width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 48px;">🧘</div>
+                        </div>
+                        <h3 style="font-size: 22px; margin-bottom: 8px;">Morning Calm</h3>
+                        <p style="color: #a0a0b0; margin-bottom: 30px;">10 minute guided session</p>
+                        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;">
+                            <div style="text-align: center;">
+                                <p style="font-size: 24px; font-weight: 700;">10:00</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">Duration</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <p style="font-size: 24px; font-weight: 700;">🔥 7</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">Day Streak</p>
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 80%; margin: 0 auto;">▶ Begin Session</button>
+                        <div style="margin-top: 30px;">
+                            <p style="font-size: 14px; color: #a0a0b0; margin-bottom: 12px;">More Sessions</p>
+                            <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px;">
+                                <div class="glass-card" style="min-width: 100px; text-align: center; margin: 0;">
+                                    <div style="font-size: 24px; margin-bottom: 8px;">🌙</div>
+                                    <p style="font-size: 12px;">Sleep</p>
+                                </div>
+                                <div class="glass-card" style="min-width: 100px; text-align: center; margin: 0;">
+                                    <div style="font-size: 24px; margin-bottom: 8px;">🎯</div>
+                                    <p style="font-size: 12px;">Focus</p>
+                                </div>
+                                <div class="glass-card" style="min-width: 100px; text-align: center; margin: 0;">
+                                    <div style="font-size: 24px; margin-bottom: 8px;">💆</div>
+                                    <p style="font-size: 12px;">Stress</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Meditation Hub</h3>
+            <p class="mockup-desc">Guided sessions for mindfulness and relaxation</p>
+        </div>
+
+        <!-- Screen 4: Habit Creation -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="app-header">
+                            <span style="font-size: 20px;">×</span>
+                            <span style="font-weight: 600;">New Habit</span>
+                            <span style="color: #6366f1; font-weight: 600;">Save</span>
+                        </div>
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 16px; border-radius: 20px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1)); display: flex; align-items: center; justify-content: center; font-size: 36px;">🥗</div>
+                            <p style="color: #a0a0b0; font-size: 13px;">Tap to change icon</p>
+                        </div>
+                        <input class="input-field" placeholder="Habit name" value="Eat Healthy Lunch">
+                        <p style="font-size: 14px; font-weight: 600; margin: 16px 0 12px;">Frequency</p>
+                        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                            <div class="glass-card" style="flex: 1; text-align: center; padding: 12px; margin: 0; border-color: #6366f1;">Daily</div>
+                            <div class="glass-card" style="flex: 1; text-align: center; padding: 12px; margin: 0;">Weekly</div>
+                            <div class="glass-card" style="flex: 1; text-align: center; padding: 12px; margin: 0;">Custom</div>
+                        </div>
+                        <p style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Reminder</p>
+                        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>12:00 PM</span>
+                            <div style="width: 44px; height: 24px; background: #6366f1; border-radius: 12px; position: relative;">
+                                <div style="width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                            </div>
+                        </div>
+                        <p style="font-size: 14px; font-weight: 600; margin: 16px 0 12px;">Color</p>
+                        <div style="display: flex; gap: 12px;">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #22c55e; border: 3px solid #fff;"></div>
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #6366f1;"></div>
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #ec4899;"></div>
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #f59e0b;"></div>
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #06b6d4;"></div>
+                        </div>
+                        <button class="btn" style="margin-top: 30px;">Create Habit</button>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Create Habit</h3>
+            <p class="mockup-desc">Customize habits with reminders and tracking</p>
+        </div>
+
+        <!-- Screen 5: Statistics -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="app-header">
+                            <h2 class="app-title">Statistics</h2>
+                            <div class="glass-card" style="padding: 8px 12px; margin: 0; font-size: 13px;">This Week ▼</div>
+                        </div>
+                        <div class="glass-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05));">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p style="font-size: 13px; color: #a0a0b0;">Completion Rate</p>
+                                    <p style="font-size: 32px; font-weight: 800; color: #22c55e;">87%</p>
+                                </div>
+                                <div style="font-size: 40px;">📈</div>
+                            </div>
+                            <p style="font-size: 12px; color: #22c55e;">↑ 12% from last week</p>
+                        </div>
+                        <p style="font-size: 14px; font-weight: 600; margin: 20px 0 12px;">Weekly Overview</p>
+                        <div class="glass-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100px; padding-bottom: 10px;">
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 60px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">M</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 80px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">T</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 70px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">W</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 90px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">T</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 85px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">F</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 50px; width: 20px; margin: 0 auto; background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">S</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 40px; width: 20px; margin: 0 auto; background: rgba(99, 102, 241, 0.3); border-radius: 4px;"></div>
+                                    <p style="font-size: 11px; color: #a0a0b0; margin-top: 6px;">S</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="font-size: 14px; font-weight: 600; margin: 20px 0 12px;">Achievements</p>
+                        <div style="display: flex; gap: 12px;">
+                            <div class="glass-card" style="flex: 1; text-align: center; margin: 0;">
+                                <div style="font-size: 28px;">🔥</div>
+                                <p style="font-size: 18px; font-weight: 700;">14</p>
+                                <p style="font-size: 11px; color: #a0a0b0;">Day Streak</p>
+                            </div>
+                            <div class="glass-card" style="flex: 1; text-align: center; margin: 0;">
+                                <div style="font-size: 28px;">⭐</div>
+                                <p style="font-size: 18px; font-weight: 700;">156</p>
+                                <p style="font-size: 11px; color: #a0a0b0;">Total Done</p>
+                            </div>
+                            <div class="glass-card" style="flex: 1; text-align: center; margin: 0;">
+                                <div style="font-size: 28px;">🏆</div>
+                                <p style="font-size: 18px; font-weight: 700;">8</p>
+                                <p style="font-size: 11px; color: #a0a0b0;">Badges</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-bar">
+                        <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+                        <div class="nav-item active"><div class="nav-icon">📊</div>Stats</div>
+                        <div class="nav-item"><div class="nav-icon">🧘</div>Meditate</div>
+                        <div class="nav-item"><div class="nav-icon">👤</div>Profile</div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Statistics</h3>
+            <p class="mockup-desc">Track progress with beautiful visualizations</p>
+        </div>
+
+        <!-- Screen 6: Profile/Settings -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="width: 90px; height: 90px; margin: 0 auto 16px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: #fff;">S</div>
+                            <h3 style="font-size: 20px; font-weight: 700;">Sarah Johnson</h3>
+                            <p style="color: #a0a0b0; font-size: 14px;">Member since Jan 2024</p>
+                        </div>
+                        <div class="glass-card" style="display: flex; justify-content: space-around; text-align: center;">
+                            <div>
+                                <p style="font-size: 22px; font-weight: 700;">156</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">Habits Done</p>
+                            </div>
+                            <div style="border-left: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); padding: 0 20px;">
+                                <p style="font-size: 22px; font-weight: 700;">14</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">Day Streak</p>
+                            </div>
+                            <div>
+                                <p style="font-size: 22px; font-weight: 700;">8</p>
+                                <p style="font-size: 12px; color: #a0a0b0;">Badges</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 14px; font-weight: 600; margin: 20px 0 12px;">Settings</p>
+                        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 20px;">🔔</span>
+                                <span>Notifications</span>
+                            </div>
+                            <span style="color: #a0a0b0;">›</span>
+                        </div>
+                        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 20px;">🌙</span>
+                                <span>Dark Mode</span>
+                            </div>
+                            <div style="width: 44px; height: 24px; background: #6366f1; border-radius: 12px; position: relative;">
+                                <div style="width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                            </div>
+                        </div>
+                        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 20px;">🔒</span>
+                                <span>Privacy</span>
+                            </div>
+                            <span style="color: #a0a0b0;">›</span>
+                        </div>
+                        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 20px;">💎</span>
+                                <span>Upgrade to Pro</span>
+                            </div>
+                            <span style="background: linear-gradient(135deg, #6366f1, #a855f7); padding: 4px 10px; border-radius: 8px; font-size: 12px;">NEW</span>
+                        </div>
+                    </div>
+                    <div class="nav-bar">
+                        <div class="nav-item"><div class="nav-icon">🏠</div>Home</div>
+                        <div class="nav-item"><div class="nav-icon">📊</div>Stats</div>
+                        <div class="nav-item"><div class="nav-icon">🧘</div>Meditate</div>
+                        <div class="nav-item active"><div class="nav-icon">👤</div>Profile</div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Profile & Settings</h3>
+            <p class="mockup-desc">Manage account and app preferences</p>
+        </div>
+
+        <!-- Screen 7: Habit Completion -->
+        <div class="mockup-card">
+            <div class="device-frame">
+                <div class="screen" style="background: linear-gradient(180deg, #1a2e1a 0%, #0f1a0f 100%);">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content" style="text-align: center; display: flex; flex-direction: column; justify-content: center; padding-top: 60px;">
+                        <div style="font-size: 80px; margin-bottom: 20px; animation: float 2s ease-in-out infinite;">🎉</div>
+                        <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 12px;">Amazing!</h2>
+                        <p style="color: #a0a0b0; margin-bottom: 30px; padding: 0 30px;">You've completed your morning meditation session</p>
+                        <div class="glass-card" style="background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); margin: 0 20px;">
+                            <div style="display: flex; justify-content: space-around;">
+                                <div>
+                                    <p style="font-size: 28px; font-weight: 700; color: #22c55e;">+50</p>
+                                    <p style="font-size: 12px; color: #a0a0b0;">Points Earned</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 28px; font-weight: 700; color: #f59e0b;">🔥 15</p>
+                                    <p style="font-size: 12px; color: #a0a0b0;">Day Streak!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin: 30px 20px 0;">
+                            <p style="font-size: 14px; color: #a0a0b0; margin-bottom: 16px;">Share your achievement</p>
+                            <div style="display: flex; gap: 12px; justify-content: center;">
+                                <div class="glass-card" style="padding: 12px 20px; margin: 0;">📱</div>
+                                <div class="glass-card" style="padding: 12px 20px; margin: 0;">📸</div>
+                                <div class="glass-card" style="padding: 12px 20px; margin: 0;">🐦</div>
+                            </div>
+                        </div>
+                        <button class="btn" style="margin: 30px 20px 0;">Continue</button>
+                    </div>
+                </div>
+            </div>
+            <h3 class="mockup-title">Completion Celebration</h3>
+            <p class="mockup-desc">Reward users for achieving their goals</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Generated by <strong>Blueprint Brain</strong> ✨</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+    </script>
+</body>
+</html>
