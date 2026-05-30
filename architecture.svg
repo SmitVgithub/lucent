@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="800" fill="#F8FAFC"/>
+  
+  <!-- Title -->
+  <text x="600" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1E293B" text-anchor="middle">Lucent - Web Application Architecture</text>
+  <text x="600" y="75" font-family="Arial, sans-serif" font-size="14" fill="#64748B" text-anchor="middle">End Consumer Platform | Web-Based Application</text>
+  
+  <!-- User Layer Label -->
+  <rect x="30" y="110" width="120" height="30" rx="4" ry="4" fill="#E0E7FF"/>
+  <text x="90" y="130" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#3730A3" text-anchor="middle">USERS</text>
+  
+  <!-- End Users Icon Group -->
+  <g>
+    <!-- User 1 -->
+    <circle cx="280" cy="160" r="25" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+    <circle cx="280" cy="152" r="8" fill="#3B82F6"/>
+    <path d="M265 175 Q280 165 295 175" stroke="#3B82F6" stroke-width="3" fill="none"/>
+    <text x="280" y="205" font-family="Arial, sans-serif" font-size="12" fill="#1E40AF" text-anchor="middle">Desktop User</text>
+    
+    <!-- User 2 -->
+    <circle cx="480" cy="160" r="25" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+    <circle cx="480" cy="152" r="8" fill="#3B82F6"/>
+    <path d="M465 175 Q480 165 495 175" stroke="#3B82F6" stroke-width="3" fill="none"/>
+    <text x="480" y="205" font-family="Arial, sans-serif" font-size="12" fill="#1E40AF" text-anchor="middle">Tablet User</text>
+    
+    <!-- User 3 -->
+    <circle cx="680" cy="160" r="25" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+    <circle cx="680" cy="152" r="8" fill="#3B82F6"/>
+    <path d="M665 175 Q680 165 695 175" stroke="#3B82F6" stroke-width="3" fill="none"/>
+    <text x="680" y="205" font-family="Arial, sans-serif" font-size="12" fill="#1E40AF" text-anchor="middle">Mobile User</text>
+  </g>
+  
+  <!-- Connection Lines from Users -->
+  <line x1="280" y1="220" x2="400" y2="290" stroke="#6B7280" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <line x1="480" y1="220" x2="480" y2="290" stroke="#6B7280" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <line x1="680" y1="220" x2="750" y2="290" stroke="#6B7280" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  
+  <!-- Frontend Layer Label -->
+  <rect x="30" y="300" width="120" height="30" rx="4" ry="4" fill="#DCFCE7"/>
+  <text x="90" y="320" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#166534" text-anchor="middle">FRONTEND</text>
+  
+  <!-- Frontend App Box -->
+  <rect x="300" y="290" width="280" height="120" rx="12" ry="12" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="310" y="300" width="260" height="100" rx="8" ry="8" fill="#FFFFFF" fill-opacity="0.15"/>
+  <text x="440" y="330" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Frontend App</text>
+  <text x="440" y="355" font-family="Arial, sans-serif" font-size="12" fill="#DBEAFE" text-anchor="middle">Web Application for Lucent</text>
+  <rect x="340" y="370" width="70" height="25" rx="4" ry="4" fill="#1D4ED8"/>
+  <text x="375" y="387" font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle">React</text>
+  <rect x="420" y="370" width="70" height="25" rx="4" ry="4" fill="#1D4ED8"/>
+  <text x="455" y="387" font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle">TypeScript</text>
+  
+  <!-- Mobile App Box -->
+  <rect x="620" y="290" width="280" height="120" rx="12" ry="12" fill="#8B5CF6" stroke="#6D28D9" stroke-width="2"/>
+  <rect x="630" y="300" width="260" height="100" rx="8" ry="8" fill="#FFFFFF" fill-opacity="0.15"/>
+  <text x="760" y="330" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Mobile App</text>
+  <text x="760" y="355" font-family="Arial, sans-serif" font-size="12" fill="#EDE9FE" text-anchor="middle">PWA for Lucent</text>
+  <rect x="670" y="370" width="80" height="25" rx="4" ry="4" fill="#6D28D9"/>
+  <text x="710" y="387" font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle">PWA</text>
+  <rect x="760" y="370" width="80" height="25" rx="4" ry="4" fill="#6D28D9"/>
+  <text x="800" y="387" font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle">Responsive</text>
+  
+  <!-- Connection between Frontend and Mobile -->
+  <line x1="580" y1="350" x2="620" y2="350" stroke="#10B981" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="10" fill="#059669" text-anchor="middle">Shared</text>
+  
+  <!-- API Layer Label -->
+  <rect x="30" y="480" width="120" height="30" rx="4" ry="4" fill="#FEF3C7"/>
+  <text x="90" y="500" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#92400E" text-anchor="middle">API LAYER</text>
+  
+  <!-- API Gateway -->
+  <rect x="400" y="470" width="400" height="80" rx="12" ry="12" fill="#10B981" stroke="#059669" stroke-width="2"/>
+  <text x="600" y="505" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">API Gateway</text>
+  <text x="600" y="530" font-family="Arial, sans-serif" font-size="12" fill="#D1FAE5" text-anchor="middle">REST API | Authentication | Rate Limiting</text>
+  
+  <!-- Connections to API Gateway -->
+  <line x1="440" y1="410" x2="500" y2="470" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+  <line x1="760" y1="410" x2="700" y2="470" stroke="#8B5CF6" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Data Layer Label -->
+  <rect x="30" y="620" width="120" height="30" rx="4" ry="4" fill="#FEE2E2"/>
+  <text x="90" y="640" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#991B1B" text-anchor="middle">DATA LAYER</text>
+  
+  <!-- Database -->
+  <rect x="250" y="610" width="200" height="100" rx="12" ry="12" fill="#6B7280" stroke="#4B5563" stroke-width="2"/>
+  <ellipse cx="350" cy="630" rx="80" ry="15" fill="#9CA3AF"/>
+  <text x="350" y="670" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Database</text>
+  <text x="350" y="690" font-family="Arial, sans-serif" font-size="11" fill="#D1D5DB" text-anchor="middle">PostgreSQL</text>
+  
+  <!-- Cache -->
+  <rect x="500" y="610" width="200" height="100" rx="12" ry="12" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+  <text x="600" y="655" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Cache Layer</text>
+  <text x="600" y="680" font-family="Arial, sans-serif" font-size="11" fill="#FEF3C7" text-anchor="middle">Redis</text>
+  
+  <!-- CDN -->
+  <rect x="750" y="610" width="200" height="100" rx="12" ry="12" fill="#EC4899" stroke="#DB2777" stroke-width="2"/>
+  <text x="850" y="655" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">CDN</text>
+  <text x="850" y="680" font-family="Arial, sans-serif" font-size="11" fill="#FCE7F3" text-anchor="middle">Static Assets</text>
+  
+  <!-- Connections from API to Data Layer -->
+  <line x1="500" y1="550" x2="350" y2="610" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="550" x2="600" y2="610" stroke="#F59E0B" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="700" y1="550" x2="850" y2="610" stroke="#EC4899" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Legend -->
+  <rect x="950" y="150" width="220" height="180" rx="8" ry="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="1060" y="175" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1E293B" text-anchor="middle">Legend</text>
+  
+  <rect x="970" y="195" width="20" height="20" rx="4" ry="4" fill="#3B82F6"/>
+  <text x="1000" y="210" font-family="Arial, sans-serif" font-size="12" fill="#475569">Frontend Service</text>
+  
+  <rect x="970" y="225" width="20" height="20" rx="4" ry="4" fill="#8B5CF6"/>
+  <text x="1000" y="240" font-family="Arial, sans-serif" font-size="12" fill="#475569">Mobile Service</text>
+  
+  <rect x="970" y="255" width="20" height="20" rx="4" ry="4" fill="#10B981"/>
+  <text x="1000" y="270" font-family="Arial, sans-serif" font-size="12" fill="#475569">API Gateway</text>
+  
+  <rect x="970" y="285" width="20" height="20" rx="4" ry="4" fill="#6B7280"/>
+  <text x="1000" y="300" font-family="Arial, sans-serif" font-size="12" fill="#475569">Data Storage</text>
+  
+  <!-- Budget Info -->
+  <rect x="950" y="360" width="220" height="80" rx="8" ry="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1060" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#166534" text-anchor="middle">Estimated Budget</text>
+  <text x="1060" y="410" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#15803D" text-anchor="middle">$50 - $70/mo</text>
+  <text x="1060" y="430" font-family="Arial, sans-serif" font-size="10" fill="#4ADE80" text-anchor="middle">Web-only deployment</text>
+  
+  <!-- Footer -->
+  <text x="600" y="770" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">Lucent Architecture Diagram | Web-Based Consumer Application</text>
+</svg>
