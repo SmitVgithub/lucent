@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncFlow GTM - Sales & Marketing Data Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-secondary: #12121a;
+            --text: #ffffff;
+            --text-secondary: #a0a0b0;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #7c3aed;
+            --accent-secondary: #06b6d4;
+            --accent-tertiary: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text: #0f172a;
+            --text-secondary: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Mesh Gradient Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                var(--bg);
+        }
+
+        /* Floating Elements */
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent-secondary);
+            top: 60%;
+            right: 10%;
+            animation-delay: -2s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent-tertiary);
+            bottom: 10%;
+            left: 30%;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(10px) rotate(-5deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 3rem 4rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary), var(--accent-tertiary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Mockups Grid */
+        .mockups-section {
+            padding: 2rem 3rem 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mockups-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Mockup Card */
+        .mockup-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mockup-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-12px) scale(1.03);
+        }
+
+        .mockup-card:hover .device-frame {
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(124, 58, 237, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .device-frame {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 40px -12px rgba(0, 0, 0, 0.3),
+                0 8px 16px -8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .device-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-dot:nth-child(1) { background: #ef4444; }
+        .browser-dot:nth-child(2) { background: #f59e0b; }
+        .browser-dot:nth-child(3) { background: #10b981; }
+
+        .browser-url {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .device-content {
+            padding: 1.5rem;
+            min-height: 400px;
+            background: var(--bg-secondary);
+        }
+
+        .mockup-info {
+            padding: 1.5rem 0.5rem;
+        }
+
+        .mockup-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .mockup-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* Screen Components */
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .screen-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .screen-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+        }
+
+        .nav-item {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            font-family: 'Sora', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .card-inner {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-inner:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .status-syncing {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .connector-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--card-border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, var(--card-bg) 25%, var(--card-border) 50%, var(--card-bg) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .sync-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .sync-arrow {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        footer span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* Login Screen Specific */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 2rem;
+        }
+
+        .login-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            width: 100%;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--card-border);
+        }
+
+        .divider-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 3rem;
+            }
+
+            .mockups-section {
+                padding: 1rem 1.5rem 4rem;
+            }
+
+            .device-content {
+                min-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            SyncFlow GTM
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            🌙
+        </button>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Multi-tenant SaaS Platform
+        </div>
+        <h1 class="hero-title">Unified GTM Data Platform</h1>
+        <p class="hero-subtitle">Connect your entire sales and marketing stack with real-time data sync. Pre-built connectors, 1-5 minute sync intervals, zero engineering required.</p>
+    </section>
+
+    <section class="mockups-section">
+        <div class="mockups-grid">
+            <!-- Screen 1: Login -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/login
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="login-container">
+                            <div class="login-logo">⚡</div>
+                            <div class="login-title">Welcome to SyncFlow</div>
+                            <div class="login-subtitle">Connect your GTM stack in minutes</div>
+                            
+                            <div class="social-login">
+                                <div class="social-btn">🔵</div>
+                                <div class="social-btn">⚫</div>
+                                <div class="social-btn">🟣</div>
+                            </div>
+                            
+                            <div class="divider">
+                                <div class="divider-line"></div>
+                                <span class="divider-text">or continue with email</span>
+                                <div class="divider-line"></div>
+                            </div>
+                            
+                            <input type="email" class="input-field" placeholder="work@company.com" style="width: 100%; max-width: 280px;">
+                            <input type="password" class="input-field" placeholder="••••••••" style="width: 100%; max-width: 280px;">
+                            
+                            <button class="btn btn-primary" style="width: 100%; max-width: 280px; margin-top: 0.5rem;">Sign In →</button>
+                            
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                                New to SyncFlow? <span style="color: var(--accent); cursor: pointer;">Start free trial</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">🔐 Secure Login</div>
+                    <div class="mockup-desc">SSO-enabled authentication with Google, Microsoft, and Okta integration</div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Dashboard -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/dashboard
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div class="screen-title">📊 Sync Dashboard</div>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span class="status-badge status-success"><span class="status-dot"></span> All Systems Healthy</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem;">
+                            <div class="metric-card">
+                                <div class="metric-value">12</div>
+                                <div class="metric-label">Active Connectors</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">2.4M</div>
+                                <div class="metric-label">Records Synced</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">99.9%</div>
+                                <div class="metric-label">Uptime</div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem;">Recent Sync Activity</div>
+                        
+                        <div class="card-inner" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="connector-icon" style="background: #E3F2FD;">🔵</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.85rem; font-weight: 500;">Salesforce → HubSpot</div>
+                                <div style="font-size: 0.7rem; color: var(--text-secondary);">1,247 contacts synced</div>
+                            </div>
+                            <span class="status-badge status-success"><span class="status-dot"></span> Complete</span>
+                        </div>
+                        
+                        <div class="card-inner" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="connector-icon" style="background: #FFF3E0;">🟠</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.85rem; font-weight: 500;">Marketo → Snowflake</div>
+                                <div style="font-size: 0.7rem; color: var(--text-secondary);">Processing 8,432 events...</div>
+                            </div>
+                            <span class="status-badge status-syncing"><span class="status-dot"></span> Syncing</span>
+                        </div>
+                        
+                        <div class="card-inner" style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="connector-icon" style="background: #E8F5E9;">🟢</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.85rem; font-weight: 500;">Outreach → Salesforce</div>
+                                <div style="font-size: 0.7rem; color: var(--text-secondary);">562 activities synced</div>
+                            </div>
+                            <span class="status-badge status-success"><span class="status-dot"></span> Complete</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">📈 Real-time Dashboard</div>
+                    <div class="mockup-desc">Monitor all your data syncs with live status updates and performance metrics</div>
+                </div>
+            </div>
+
+            <!-- Screen 3: Connector Marketplace -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/connectors
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div class="screen-title">🔌 Pre-built Connectors</div>
+                            <button class="btn btn-primary">+ Add Connector</button>
+                        </div>
+                        
+                        <div class="screen-nav">
+                            <span class="nav-item active">All (47)</span>
+                            <span class="nav-item">CRM (8)</span>
+                            <span class="nav-item">Marketing (12)</span>
+                            <span class="nav-item">Sales (9)</span>
+                            <span class="nav-item">Data (6)</span>
+                        </div>
+                        
+                        <input type="text" class="input-field" placeholder="🔍 Search connectors..." style="margin-bottom: 1rem;">
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                            <div class="card-inner" style="text-align: center; padding: 1rem;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #00A1E0, #0070D2);">☁️</div>
+                                <div style="font-size: 0.85rem; font-weight: 600;">Salesforce</div>
+                                <div style="font-size: 0.65rem; color: var(--text-secondary);">CRM</div>
+                                <span class="status-badge status-success" style="margin-top: 0.5rem; font-size: 0.6rem;">Connected</span>
+                            </div>
+                            
+                            <div class="card-inner" style="text-align: center; padding: 1rem;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #FF7A59, #FF5C35);">🧡</div>
+                                <div style="font-size: 0.85rem; font-weight: 600;">HubSpot</div>
+                                <div style="font-size: 0.65rem; color: var(--text-secondary);">Marketing</div>
+                                <span class="status-badge status-success" style="margin-top: 0.5rem; font-size: 0.6rem;">Connected</span>
+                            </div>
+                            
+                            <div class="card-inner" style="text-align: center; padding: 1rem;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #5C4EE5, #8B7CF7);">📧</div>
+                                <div style="font-size: 0.85rem; font-weight: 600;">Outreach</div>
+                                <div style="font-size: 0.65rem; color: var(--text-secondary);">Sales Engagement</div>
+                                <span class="status-badge status-success" style="margin-top: 0.5rem; font-size: 0.6rem;">Connected</span>
+                            </div>
+                            
+                            <div class="card-inner" style="text-align: center; padding: 1rem; opacity: 0.7;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #29B5E8, #00A3E0);">❄️</div>
+                                <div style="font-size: 0.85rem; font-weight: 600;">Snowflake</div>
+                                <div style="font-size: 0.65rem; color: var(--text-secondary);">Data Warehouse</div>
+                                <button class="btn btn-secondary" style="margin-top: 0.5rem; font-size: 0.6rem; padding: 0.3rem 0.6rem;">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">🔌 Connector Marketplace</div>
+                    <div class="mockup-desc">47+ pre-built connectors for your entire GTM stack — no code required</div>
+                </div>
+            </div>
+
+            <!-- Screen 4: Sync Configuration -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/syncs/new
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div class="screen-title">⚙️ Configure Sync</div>
+                            <button class="btn btn-secondary">Cancel</button>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1.5rem 0;">
+                            <div style="text-align: center;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #00A1E0, #0070D2); width: 56px; height: 56px; font-size: 1.5rem;">☁️</div>
+                                <div style="font-size: 0.8rem; font-weight: 500;">Salesforce</div>
+                            </div>
+                            <div style="font-size: 1.5rem; color: var(--accent);">⟷</div>
+                            <div style="text-align: center;">
+                                <div class="connector-icon" style="margin: 0 auto 0.5rem; background: linear-gradient(135deg, #FF7A59, #FF5C35); width: 56px; height: 56px; font-size: 1.5rem;">🧡</div>
+                                <div style="font-size: 0.8rem; font-weight: 500;">HubSpot</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;">📋 Object Mapping</div>
+                            <div class="sync-line">
+                                <span style="font-size: 0.75rem;">Contacts</span>
+                                <span class="sync-arrow">→</span>
+                                <span style="font-size: 0.75rem;">Contacts</span>
+                                <span class="status-badge status-success" style="margin-left: auto; font-size: 0.6rem;">Mapped</span>
+                            </div>
+                            <div class="sync-line">
+                                <span style="font-size: 0.75rem;">Accounts</span>
+                                <span class="sync-arrow">→</span>
+                                <span style="font-size: 0.75rem;">Companies</span>
+                                <span class="status-badge status-success" style="margin-left: auto; font-size: 0.6rem;">Mapped</span>
+                            </div>
+                            <div class="sync-line">
+                                <span style="font-size: 0.75rem;">Opportunities</span>
+                                <span class="sync-arrow">→</span>
+                                <span style="font-size: 0.75rem;">Deals</span>
+                                <span class="status-badge status-warning" style="margin-left: auto; font-size: 0.6rem;">Configure</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;">⏱️ Sync Frequency</div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;">1 min</button>
+                                <button class="btn btn-primary" style="flex: 1; font-size: 0.7rem;">5 min</button>
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;">15 min</button>
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;">1 hr</button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">🚀 Start Sync</button>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">⚙️ Sync Configuration</div>
+                    <div class="mockup-desc">Visual field mapping with 1-5 minute sync intervals for real-time data flow</div>
+                </div>
+            </div>
+
+            <!-- Screen 5: Sync Details -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/syncs/sf-hs-001
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="connector-icon" style="width: 36px; height: 36px; font-size: 1rem;">☁️</div>
+                                <span class="sync-arrow">→</span>
+                                <div class="connector-icon" style="width: 36px; height: 36px; font-size: 1rem;">🧡</div>
+                                <div style="margin-left: 0.5rem;">
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Salesforce → HubSpot</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-secondary);">Last sync: 2 minutes ago</div>
+                                </div>
+                            </div>
+                            <span class="status-badge status-success"><span class="status-dot"></span> Active</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem;">
+                            <div class="metric-card">
+                                <div class="metric-value" style="font-size: 1.2rem;">24,847</div>
+                                <div class="metric-label">Total Records</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" style="font-size: 1.2rem;">1,247</div>
+                                <div class="metric-label">Today's Syncs</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-size: 0.75rem; font-weight: 600;">Current Sync Progress</span>
+                                <span style="font-size: 0.7rem; color: var(--accent);">78%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span style="font-size: 0.65rem; color: var(--text-secondary);">1,892 / 2,431 records</span>
+                                <span style="font-size: 0.65rem; color: var(--text-secondary);">~45s remaining</span>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;">📜 Sync History</div>
+                        <div style="max-height: 100px; overflow-y: auto;">
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--card-border); font-size: 0.7rem;">
+                                <span>10:45 AM</span>
+                                <span style="color: var(--success);">✓ 1,247 synced</span>
+                                <span style="color: var(--text-secondary);">2.3s</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--card-border); font-size: 0.7rem;">
+                                <span>10:40 AM</span>
+                                <span style="color: var(--success);">✓ 892 synced</span>
+                                <span style="color: var(--text-secondary);">1.8s</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; font-size: 0.7rem;">
+                                <span>10:35 AM</span>
+                                <span style="color: var(--success);">✓ 1,103 synced</span>
+                                <span style="color: var(--text-secondary);">2.1s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">📋 Sync Details</div>
+                    <div class="mockup-desc">Real-time progress tracking with complete sync history and performance metrics</div>
+                </div>
+            </div>
+
+            <!-- Screen 6: Tenant Settings -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/settings
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div class="screen-title">⚙️ Workspace Settings</div>
+                        </div>
+                        
+                        <div class="screen-nav">
+                            <span class="nav-item active">General</span>
+                            <span class="nav-item">Team</span>
+                            <span class="nav-item">Billing</span>
+                            <span class="nav-item">API</span>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="avatar" style="background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); width: 50px; height: 50px; font-size: 1.3rem;">🏢</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Acme Corporation</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-secondary);">Enterprise Plan • 12 team members</div>
+                                </div>
+                                <button class="btn btn-secondary" style="font-size: 0.7rem;">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;">🔐 Data Isolation</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.75rem;">Tenant ID</span>
+                                <code style="font-size: 0.7rem; background: var(--card-bg); padding: 0.25rem 0.5rem; border-radius: 6px;">tn_acme_8x7k2</code>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.75rem;">Data Region</span>
+                                <span style="font-size: 0.7rem; color: var(--text-secondary);">🇺🇸 US-East-1</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner">
+                            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;">📊 Usage This Month</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.75rem;">Records Synced</span>
+                                <span style="font-size: 0.75rem; font-weight: 600;">2.4M / 5M</span>
+                            </div>
+                            <div class="progress-bar" style="margin-bottom: 0.75rem;">
+                                <div class="progress-fill" style="width: 48%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.75rem;">Active Syncs</span>
+                                <span style="font-size: 0.75rem; font-weight: 600;">12 / 25</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">🏢 Workspace Settings</div>
+                    <div class="mockup-desc">Multi-tenant workspace management with data isolation and usage tracking</div>
+                </div>
+            </div>
+
+            <!-- Screen 7: Analytics -->
+            <div class="mockup-card">
+                <div class="device-frame">
+                    <div class="device-header">
+                        <div class="browser-dots">
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                            <div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-url">
+                            🔒 app.syncflow.io/analytics
+                        </div>
+                    </div>
+                    <div class="device-content">
+                        <div class="screen-header">
+                            <div class="screen-title">📈 Analytics</div>
+                            <select class="input-field" style="width: auto; margin: 0; padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                                <option>Last 7 days</option>
+                                <option>Last 30 days</option>
+                                <option>Last 90 days</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
+                            <div class="metric-card" style="padding: 0.75rem;">
+                                <div class="metric-value" style="font-size: 1rem;">8.2M</div>
+                                <div class="metric-label" style="font-size: 0.6rem;">Total Synced</div>
+                            </div>
+                            <div class="metric-card" style="padding: 0.75rem;">
+                                <div class="metric-value" style="font-size: 1rem;">99.9%</div>
+                                <div class="metric-label" style="font-size: 0.6rem;">Success Rate</div>
+                            </div>
+                            <div class="metric-card" style="padding: 0.75rem;">
+                                <div class="metric-value" style="font-size: 1rem;">1.2s</div>
+                                <div class="metric-label" style="font-size: 0.6rem;">Avg Latency</div>
+                            </div>
+                            <div class="metric-card" style="padding: 0.75rem;">
+                                <div class="metric-value" style="font-size: 1rem;">47</div>
+                                <div class="metric-label" style="font-size: 0.6rem;">Connectors</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-inner" style="padding: 1rem;">
+                            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;">📊 Sync Volume (7 days)</div>
+                            <div style="display: flex; align-items: flex-end; gap: 0.5rem; height: 80px;">
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 60%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 75%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 45%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 90%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 70%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 85%;"></div>
+                                <div style="flex: 1; background: linear-gradient(to top, var(--accent), var(--accent-secondary)); border-radius: 4px 4px 0 0; height: 100%; position: relative;">
+                                    <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent);">1.4M</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.6rem; color: var(--text-secondary);">
+                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 0.75rem; font-weight: 600; margin: 0.75rem 0 0.5rem;">🏆 Top Performing Syncs</div>
+                        <div style="display: flex; gap: 0.5rem; font-size: 0.7rem;">
+                            <div style="flex: 1; background: var(--card-bg); padding: 0.5rem; border-radius: 8px; text-align: center;">
+                                <div>☁️→🧡</div>
+                                <div style="color: var(--success); font-weight: 600;">2.1M</div>
+                            </div>
+                            <div style="flex: 1; background: var(--card-bg); padding: 0.5rem; border-radius: 8px; text-align: center;">
+                                <div>📧→☁️</div>
+                                <div style="color: var(--success); font-weight: 600;">1.8M</div>
+                            </div>
+                            <div style="flex: 1; background: var(--card-bg); padding: 0.5rem; border-radius: 8px; text-align: center;">
+                                <div>🟠→❄️</div>
+                                <div style="color: var(--success); font-weight: 600;">1.2M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <div class="mockup-title">📈 Analytics Dashboard</div>
+                    <div class="mockup-desc">Comprehensive insights into sync performance, volume trends, and system health</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Generated by <span>Blueprint Brain</span> ✨
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const toggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                toggle.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                toggle.textContent = '☀️';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all mockup cards
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add subtle parallax effect to floating orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.floating-orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                orb.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+
+        // Animate progress bars on scroll
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fills = entry.target.querySelectorAll('.progress-fill');
+                    fills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 300);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.device-content').forEach(content => {
+            progressObserver.observe(content);
+        });
+    </script>
+</body>
+</html>
