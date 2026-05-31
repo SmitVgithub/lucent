@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackFleet - UI Mockups</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-secondary: #12121a;
+            --text: #ffffff;
+            --text-secondary: #a0a0b0;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #00d4aa;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #f59e0b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --shadow-color: rgba(0, 212, 170, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --shadow-color: rgba(0, 212, 170, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* Mesh Gradient Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(0, 212, 170, 0.1) 0%, transparent 40%),
+                var(--bg);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .float-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .float-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-secondary);
+            top: 50%;
+            right: -100px;
+            animation-delay: -2s;
+        }
+
+        .float-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent-tertiary);
+            bottom: -50px;
+            left: 30%;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(5deg); }
+            50% { transform: translate(-10px, 20px) rotate(-5deg); }
+            75% { transform: translate(-20px, -10px) rotate(3deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: var(--accent); box-shadow: 0 0 20px var(--shadow-color); }
+            50% { border-color: var(--accent-secondary); box-shadow: 0 0 30px rgba(124, 58, 237, 0.3); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .theme-toggle {
+            padding: 12px 24px;
+            border: 2px solid var(--card-border);
+            border-radius: 50px;
+            background: var(--glass-bg);
+            color: var(--text);
+            font-family: 'Sora', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 3rem 80px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary), var(--accent-tertiary), var(--accent));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Mockups Grid */
+        .mockups-section {
+            padding: 2rem 3rem 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mockups-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Mockup Card */
+        .mockup-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mockup-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-12px) scale(1.02);
+        }
+
+        .mockup-card:hover .device-frame {
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.4),
+                0 0 40px var(--shadow-color),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .device-frame {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Phone Frame */
+        .phone-frame {
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .phone-frame .device-frame {
+            border-radius: 40px;
+            padding: 12px;
+            background: linear-gradient(145deg, #2a2a35, #1a1a22);
+        }
+
+        .phone-screen {
+            background: var(--bg-secondary);
+            border-radius: 32px;
+            overflow: hidden;
+            min-height: 580px;
+        }
+
+        /* Laptop Frame */
+        .laptop-frame .device-frame {
+            border-radius: 16px 16px 0 0;
+        }
+
+        .laptop-screen {
+            background: var(--bg-secondary);
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .laptop-base {
+            height: 20px;
+            background: linear-gradient(180deg, #3a3a45, #2a2a35);
+            border-radius: 0 0 8px 8px;
+            margin: 0 -20px;
+            position: relative;
+        }
+
+        .laptop-base::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: #1a1a22;
+            border-radius: 3px;
+        }
+
+        /* iPad Frame */
+        .ipad-frame {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .ipad-frame .device-frame {
+            border-radius: 24px;
+            padding: 16px;
+            background: linear-gradient(145deg, #2a2a35, #1a1a22);
+        }
+
+        .ipad-screen {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 360px;
+        }
+
+        /* Screen Components */
+        .screen-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            background: var(--glass-bg);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .screen-content {
+            padding: 20px;
+        }
+
+        .screen-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .screen-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* UI Components */
+        .input-field {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #00b894);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--accent);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-tertiary);
+        }
+
+        .badge-info {
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--accent-secondary);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .card-inner {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Map Placeholder */
+        .map-container {
+            background: linear-gradient(135deg, #1a2a3a, #0f1a25);
+            border-radius: 16px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .map-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(90deg, transparent 49%, rgba(0, 212, 170, 0.1) 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, rgba(0, 212, 170, 0.1) 50%, transparent 51%);
+            background-size: 30px 30px;
+        }
+
+        .map-marker {
+            position: absolute;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .map-route {
+            position: absolute;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            top: 50%;
+            left: 20%;
+            transform: rotate(-15deg);
+            border-radius: 2px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Shimmer Effect */
+        .shimmer {
+            background: linear-gradient(90deg, 
+                var(--card-bg) 25%, 
+                rgba(255,255,255,0.1) 50%, 
+                var(--card-bg) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        /* Driver List */
+        .driver-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .driver-info {
+            flex: 1;
+        }
+
+        .driver-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .driver-status {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mockup Info */
+        .mockup-info {
+            padding: 24px 8px 8px;
+            text-align: center;
+        }
+
+        .mockup-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .mockup-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            background: var(--glass-bg);
+            border-top: 1px solid var(--card-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item span {
+            font-size: 1.2rem;
+        }
+
+        /* Invoice Item */
+        .invoice-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .invoice-amount {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: var(--card-border);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            left: 23px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            .hero {
+                padding: 140px 1.5rem 60px;
+            }
+
+            .mockups-section {
+                padding: 1rem 1.5rem 4rem;
+            }
+
+            .mockups-grid {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="floating-element float-1"></div>
+    <div class="floating-element float-2"></div>
+    <div class="floating-element float-3"></div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🚛</div>
+            <span>TrackFleet</span>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="theme-icon">☀️</span> Light Mode
+        </button>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span></span>
+            Real-time Fleet Management System
+        </div>
+        <h1>TrackFleet UI Mockups</h1>
+        <p>A comprehensive fleet management solution featuring a web dashboard for dispatchers, Android driver app with offline GPS, and iPad warehouse management interface.</p>
+    </section>
+
+    <section class="mockups-section">
+        <div class="mockups-grid">
+
+            <!-- Screen 1: Login/Welcome -->
+            <div class="mockup-card">
+                <div class="phone-frame">
+                    <div class="device-frame">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <div class="status-icons">📶 🔋</div>
+                            </div>
+                            <div class="screen-content" style="padding-top: 60px; text-align: center;">
+                                <div style="font-size: 4rem; margin-bottom: 20px;">🚛</div>
+                                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 8px;">TrackFleet</h2>
+                                <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 0.9rem;">Driver Portal</p>
+                                
+                                <div class="input-field">
+                                    <span>👤</span>
+                                    <span>Driver ID or Email</span>
+                                </div>
+                                <div class="input-field">
+                                    <span>🔒</span>
+                                    <span>Password</span>
+                                </div>
+                                
+                                <button class="btn-primary" style="margin-top: 20px;">Sign In</button>
+                                
+                                <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-secondary);">
+                                    Forgot password? <span style="color: var(--accent);">Reset here</span>
+                                </p>
+                                
+                                <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--card-border);">
+                                    <p style="font-size: 0.75rem; color: var(--text-secondary);">Powered by Mapbox 🗺️</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Driver Login Screen</h3>
+                    <p>Android app authentication with offline capability indicator</p>
+                </div>
+            </div>
+
+            <!-- Screen 2: Dispatcher Dashboard -->
+            <div class="mockup-card">
+                <div class="laptop-frame">
+                    <div class="device-frame">
+                        <div class="laptop-screen">
+                            <div class="screen-header">
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <span style="font-size: 1.2rem;">🚛</span>
+                                    <span style="font-weight: 600;">TrackFleet</span>
+                                    <span class="badge badge-success">Live</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-size: 0.85rem; color: var(--text-secondary);">🔔 3</span>
+                                    <div class="avatar avatar-sm">JD</div>
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 250px 1fr; height: 340px;">
+                                <!-- Sidebar -->
+                                <div style="background: var(--card-bg); border-right: 1px solid var(--card-border); padding: 16px;">
+                                    <div style="margin-bottom: 20px;">
+                                        <div class="input-field" style="margin-bottom: 16px; padding: 10px 12px;">
+                                            <span>🔍</span>
+                                            <span style="font-size: 0.8rem;">Search drivers...</span>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Active Drivers (47)</div>
+                                    
+                                    <div class="driver-item" style="margin-bottom: 8px; padding: 10px;">
+                                        <div class="avatar avatar-sm">MR</div>
+                                        <div class="driver-info">
+                                            <div class="driver-name" style="font-size: 0.8rem;">Mike Rodriguez</div>
+                                            <div class="driver-status">Route #127 • 12 stops</div>
+                                        </div>
+                                        <div class="online-dot"></div>
+                                    </div>
+                                    <div class="driver-item" style="margin-bottom: 8px; padding: 10px;">
+                                        <div class="avatar avatar-sm">SK</div>
+                                        <div class="driver-info">
+                                            <div class="driver-name" style="font-size: 0.8rem;">Sarah Kim</div>
+                                            <div class="driver-status">Route #089 • 8 stops</div>
+                                        </div>
+                                        <div class="online-dot"></div>
+                                    </div>
+                                    <div class="driver-item" style="padding: 10px; opacity: 0.6;">
+                                        <div class="avatar avatar-sm">TJ</div>
+                                        <div class="driver-info">
+                                            <div class="driver-name" style="font-size: 0.8rem;">Tom Johnson</div>
+                                            <div class="driver-status">Offline • Last seen 2h ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Main Content -->
+                                <div style="padding: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                        <div>
+                                            <h3 style="font-size: 1.1rem; font-weight: 600;">Live Fleet Map</h3>
+                                            <p style="font-size: 0.75rem; color: var(--text-secondary);">47 of 50 drivers online</p>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="btn-secondary" style="padding: 8px 12px; font-size: 0.75rem;">📍 Zones</button>
+                                            <button class="btn-secondary" style="padding: 8px 12px; font-size: 0.75rem;">📊 Analytics</button>
+                                        </div>
+                                    </div>
+                                    <div class="map-container" style="height: 200px;">
+                                        <div class="map-marker" style="top: 30%; left: 25%;">🚛</div>
+                                        <div class="map-marker" style="top: 50%; left: 45%;">🚛</div>
+                                        <div class="map-marker" style="top: 35%; left: 70%;">🚛</div>
+                                        <div class="map-marker" style="top: 65%; left: 30%;">🚛</div>
+                                        <div class="map-marker" style="top: 70%; left: 60%;">📦</div>
+                                        <div class="map-marker" style="top: 20%; left: 55%;">📦</div>
+                                        <div class="map-route"></div>
+                                        <div style="position: absolute; bottom: 10px; right: 10px; background: var(--glass-bg); padding: 6px 10px; border-radius: 8px; font-size: 0.65rem; backdrop-filter: blur(10px);">
+                                            Powered by Mapbox
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="laptop-base"></div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Dispatcher Dashboard</h3>
+                    <p>Real-time fleet monitoring with Mapbox integration for 50 dispatchers</p>
+                </div>
+            </div>
+
+            <!-- Screen 3: Driver Active Route -->
+            <div class="mockup-card">
+                <div class="phone-frame">
+                    <div class="device-frame">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <div class="status-icons">
+                                    <span style="color: var(--accent); font-size: 0.65rem;">● GPS</span>
+                                    📶 🔋
+                                </div>
+                            </div>
+                            <div class="screen-header" style="padding: 12px 16px;">
+                                <div>
+                                    <div class="screen-title" style="font-size: 1rem;">Route #127</div>
+                                    <div class="screen-subtitle">12 stops • Est. 4h 30m</div>
+                                </div>
+                                <span class="badge badge-success">On Track</span>
+                            </div>
+                            
+                            <div class="map-container" style="margin: 0; border-radius: 0; height: 160px;">
+                                <div class="map-marker" style="top: 40%; left: 30%;">📍</div>
+                                <div class="map-marker" style="top: 50%; left: 60%;">🚛</div>
+                                <div class="map-marker" style="top: 30%; left: 80%;">🏁</div>
+                                <div class="map-route" style="width: 50%; left: 30%; top: 45%;"></div>
+                            </div>
+                            
+                            <div class="screen-content" style="padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">7</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Completed</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-tertiary);">5</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Remaining</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700;">2:15</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);">ETA</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px;">NEXT STOP</div>
+                                <div class="card-inner" style="border-left: 3px solid var(--accent);">
+                                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.9rem;">Warehouse District B</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-secondary);">1847 Industrial Blvd</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">📦 3 packages • 45 lbs</div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-weight: 600; color: var(--accent);">0.8 mi</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">~4 min</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn-primary" style="margin-top: 12px;">
+                                    📍 Navigate to Stop
+                                </button>
+                                
+                                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                    <button class="btn-secondary" style="flex: 1; font-size: 0.8rem;">📞 Contact</button>
+                                    <button class="btn-secondary" style="flex: 1; font-size: 0.8rem;">⚠️ Report Issue</button>
+                                </div>
+                            </div>
+                            
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <span>🗺️</span>
+                                    Route
+                                </div>
+                                <div class="nav-item">
+                                    <span>📋</span>
+                                    Stops
+                                </div>
+                                <div class="nav-item">
+                                    <span>💬</span>
+                                    Messages
+                                </div>
+                                <div class="nav-item">
+                                    <span>👤</span>
+                                    Profile
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Driver Active Route</h3>
+                    <p>Android app with offline GPS tracking and turn-by-turn navigation</p>
+                </div>
+            </div>
+
+            <!-- Screen 4: iPad Warehouse Manager -->
+            <div class="mockup-card">
+                <div class="ipad-frame">
+                    <div class="device-frame">
+                        <div class="ipad-screen">
+                            <div class="screen-header" style="padding: 12px 20px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 1.1rem;">🏭</span>
+                                    <span style="font-weight: 600;">Warehouse Hub A</span>
+                                    <span class="badge badge-success">Operational</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Wed, Nov 15</span>
+                                    <div class="avatar avatar-sm">WM</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 16px;">
+                                <div class="stat-card">
+                                    <div class="stat-value">127</div>
+                                    <div class="stat-label">Incoming Today</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" style="color: var(--accent-secondary);">89</div>
+                                    <div class="stat-label">Dispatched</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" style="color: var(--accent-tertiary);">38</div>
+                                    <div class="stat-label">Pending</div>
+                                </div>
+                            </div>
+                            
+                            <div style="padding: 0 16px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase;">Dock Status</div>
+                                    <div class="card-inner" style="padding: 12px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="font-size: 0.8rem;">Dock A1</span>
+                                            <span class="badge badge-success">Loading</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="font-size: 0.8rem;">Dock A2</span>
+                                            <span class="badge badge-warning">Waiting</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="font-size: 0.8rem;">Dock B1</span>
+                                            <span class="badge badge-info">Unloading</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="font-size: 0.8rem;">Dock B2</span>
+                                            <span class="badge" style="background: var(--card-bg); color: var(--text-secondary);">Empty</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase;">Arriving Soon</div>
+                                    <div class="card-inner" style="padding: 12px;">
+                                        <div class="list-item" style="padding: 8px 0;">
+                                            <span>🚛</span>
+                                            <div style="flex: 1;">
+                                                <div style="font-size: 0.8rem; font-weight: 500;">Mike R. - #127</div>
+                                                <div style="font-size: 0.7rem; color: var(--text-secondary);">ETA 15 min</div>
+                                            </div>
+                                        </div>
+                                        <div class="list-item" style="padding: 8px 0;">
+                                            <span>🚛</span>
+                                            <div style="flex: 1;">
+                                                <div style="font-size: 0.8rem; font-weight: 500;">Sarah K. - #089</div>
+                                                <div style="font-size: 0.7rem; color: var(--text-secondary);">ETA 32 min</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>iPad Warehouse Dashboard</h3>
+                    <p>iOS iPad app for warehouse managers to track incoming/outgoing shipments</p>
+                </div>
+            </div>
+
+            <!-- Screen 5: SMS Alert & Delivery Confirmation -->
+            <div class="mockup-card">
+                <div class="phone-frame">
+                    <div class="device-frame">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <div class="status-icons">📶 🔋</div>
+                            </div>
+                            <div class="screen-header" style="padding: 12px 16px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">←</span>
+                                    <span style="font-weight: 600;">Delivery #4892</span>
+                                </div>
+                                <span class="badge badge-success">Completed</span>
+                            </div>
+                            
+                            <div class="screen-content">
+                                <div class="card-inner" style="text-align: center; padding: 24px;">
+                                    <div style="font-size: 3rem; margin-bottom: 12px;">✅</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 4px;">Delivery Confirmed</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Nov 15, 2024 at 2:34 PM</div>
+                                </div>
+                                
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin: 16px 0 8px; text-transform: uppercase;">Delivery Details</div>
+                                <div class="card-inner">
+                                    <div class="list-item">
+                                        <span>📍</span>
+                                        <div>
+                                            <div style="font-size: 0.8rem; font-weight: 500;">1847 Industrial Blvd</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">Warehouse District B</div>
+                                        </div>
+                                    </div>
+                                    <div class="list-item">
+                                        <span>📦</span>
+                                        <div>
+                                            <div style="font-size: 0.8rem; font-weight: 500;">3 Packages</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">Total: 45 lbs</div>
+                                        </div>
+                                    </div>
+                                    <div class="list-item">
+                                        <span>✍️</span>
+                                        <div>
+                                            <div style="font-size: 0.8rem; font-weight: 500;">Signed by: John Martinez</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">Receiving Manager</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin: 16px 0 8px; text-transform: uppercase;">SMS Notification Sent</div>
+                                <div class="card-inner" style="background: rgba(0, 212, 170, 0.1); border-color: var(--accent);">
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                        <span>💬</span>
+                                        <span style="font-size: 0.75rem; color: var(--accent);">via Twilio</span>
+                                    </div>
+                                    <div style="font-size: 0.8rem; font-style: italic; color: var(--text-secondary);">
+                                        "Your delivery #4892 has been completed. Signed by John Martinez at 2:34 PM. - TrackFleet"
+                                    </div>
+                                </div>
+                                
+                                <button class="btn-primary" style="margin-top: 16px;">
+                                    📸 View Proof of Delivery
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Delivery Confirmation</h3>
+                    <p>Proof of delivery with Twilio SMS notifications to customers</p>
+                </div>
+            </div>
+
+            <!-- Screen 6: Invoice & Payments -->
+            <div class="mockup-card">
+                <div class="laptop-frame">
+                    <div class="device-frame">
+                        <div class="laptop-screen">
+                            <div class="screen-header">
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <span style="font-size: 1.2rem;">🚛</span>
+                                    <span style="font-weight: 600;">TrackFleet</span>
+                                    <span style="color: var(--text-secondary); font-size: 0.85rem;">/ Billing</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.8rem;">+ New Invoice</button>
+                                    <div class="avatar avatar-sm">JD</div>
+                                </div>
+                            </div>
+                            
+                            <div style="padding: 20px;">
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+                                    <div class="stat-card">
+                                        <div class="stat-value">$47,250</div>
+                                        <div class="stat-label">This Month</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" style="color: var(--accent-tertiary);">$8,420</div>
+                                        <div class="stat-label">Pending</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" style="color: var(--accent-secondary);">156</div>
+                                        <div class="stat-label">Invoices Sent</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">94%</div>
+                                        <div class="stat-label">Collection Rate</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <div style="font-size: 0.9rem; font-weight: 600;">Recent Invoices</div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Powered by</span>
+                                        <span style="font-weight: 600; color: #635bff;">Stripe</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="invoice-item">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span>📄</span>
+                                        <div>
+                                            <div style="font-weight: 500; font-size: 0.85rem;">INV-2024-0892</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">Acme Logistics Corp</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge badge-success">Paid</span>
+                                    <div class="invoice-amount">$2,450.00</div>
+                                </div>
+                                <div class="invoice-item">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span>📄</span>
+                                        <div>
+                                            <div style="font-weight: 500; font-size: 0.85rem;">INV-2024-0891</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">Metro Distribution LLC</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge badge-warning">Pending</span>
+                                    <div class="invoice-amount">$1,875.00</div>
+                                </div>
+                                <div class="invoice-item">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span>📄</span>
+                                        <div>
+                                            <div style="font-weight: 500; font-size: 0.85rem;">INV-2024-0890</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-secondary);">FastShip Industries</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge badge-success">Paid</span>
+                                    <div class="invoice-amount">$3,200.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="laptop-base"></div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Billing & Invoices</h3>
+                    <p>Stripe-powered payment processing and invoice management</p>
+                </div>
+            </div>
+
+            <!-- Screen 7: Settings/Profile -->
+            <div class="mockup-card">
+                <div class="phone-frame">
+                    <div class="device-frame">
+                        <div class="phone-screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <div class="status-icons">📶 🔋</div>
+                            </div>
+                            <div class="screen-header" style="padding: 12px 16px;">
+                                <span style="font-weight: 600;">Settings</span>
+                                <span></span>
+                            </div>
+                            
+                            <div class="screen-content">
+                                <div style="text-align: center; margin-bottom: 24px;">
+                                    <div class="avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 12px;">MR</div>
+                                    <div style="font-weight: 600; font-size: 1.1rem;">Mike Rodriguez</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Driver ID: DRV-4521</div>
+                                    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px;">
+                                        <span class="badge badge-success">Active</span>
+                                        <span class="badge badge-info">4.9 ★ Rating</span>
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase;">App Settings</div>
+                                <div class="card-inner" style="padding: 0 16px;">
+                                    <div class="toggle-row">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span>📍</span>
+                                            <span style="font-size: 0.85rem;">Offline GPS Tracking</span>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="toggle-row">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span>🔔</span>
+                                            <span style="font-size: 0.85rem;">Push Notifications</span>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="toggle-row">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span>🌙</span>
+                                            <span style="font-size: 0.85rem;">Dark Mode</span>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="toggle-row" style="border-bottom: none;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span>📱</span>
+                                            <span style="font-size: 0.85rem;">SMS Alerts (Twilio)</span>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin: 16px 0 8px; text-transform: uppercase;">Account</div>
+                                <div class="card-inner" style="padding: 0 16px;">
+                                    <div class="list-item" style="padding: 14px 0;">
+                                        <span>👤</span>
+                                        <span style="font-size: 0.85rem; flex: 1;">Edit Profile</span>
+                                        <span style="color: var(--text-secondary);">→</span>
+                                    </div>
+                                    <div class="list-item" style="padding: 14px 0;">
+                                        <span>🔐</span>
+                                        <span style="font-size: 0.85rem; flex: 1;">Change Password</span>
+                                        <span style="color: var(--text-secondary);">→</span>
+                                    </div>
+                                    <div class="list-item" style="padding: 14px 0; border-bottom: none; color: #ef4444;">
+                                        <span>🚪</span>
+                                        <span style="font-size: 0.85rem; flex: 1;">Sign Out</span>
+                                        <span>→</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bottom-nav">
+                                <div class="nav-item">
+                                    <span>🗺️</span>
+                                    Route
+                                </div>
+                                <div class="nav-item">
+                                    <span>📋</span>
+                                    Stops
+                                </div>
+                                <div class="nav-item">
+                                    <span>💬</span>
+                                    Messages
+                                </div>
+                                <div class="nav-item active">
+                                    <span>⚙️</span>
+                                    Settings
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-info">
+                    <h3>Driver Settings</h3>
+                    <p>Profile management with offline mode and notification preferences</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>Generated by <a href="#">Blueprint Brain</a> ✨</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">TrackFleet — Real-time Fleet Management for 500 Drivers, 50 Dispatchers, 10 Warehouses</p>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeBtn = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '☀️';
+                themeBtn.innerHTML = '<span id="theme-icon">☀️</span> Light Mode';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+                themeBtn.innerHTML = '<span id="theme-icon">🌙</span> Dark Mode';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all mockup cards
+        document.querySelectorAll('.mockup-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add subtle parallax effect to floating elements
+        document.addEventListener('mousemove', (e) => {
+            const floatingElements = document.querySelectorAll('.floating-element');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            floatingElements.forEach((el, index) => {
+                const speed = (index + 1) * 10;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                el.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+
+        // Add shimmer effect to loading elements
+        const addShimmer = () => {
+            const shimmerElements = document.querySelectorAll('.shimmer-target');
+            shimmerElements.forEach(el => {
+                el.classList.add('shimmer');
+            });
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            addShimmer();
+        });
+    </script>
+</body>
+</html>
