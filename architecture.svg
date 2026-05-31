@@ -1,0 +1,234 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280" />
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10B981" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="800" fill="#F8FAFC" rx="0" ry="0" />
+
+  <!-- Title -->
+  <text x="600" y="48" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#1E293B" text-anchor="middle">Static Landing Page — Web App Architecture</text>
+  <text x="600" y="74" font-family="Arial, sans-serif" font-size="14" fill="#64748B" text-anchor="middle">Pure Static · Single Page · Fresh Modern Design</text>
+
+  <!-- Divider line under title -->
+  <line x1="80" y1="88" x2="1120" y2="88" stroke="#E2E8F0" stroke-width="2" />
+
+  <!-- ===== LAYER LABELS ===== -->
+  <text x="44" y="200" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle" transform="rotate(-90,44,200)">USER</text>
+  <text x="44" y="390" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle" transform="rotate(-90,44,390)">DELIVERY</text>
+  <text x="44" y="590" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle" transform="rotate(-90,44,590)">ASSETS</text>
+
+  <!-- Layer bands -->
+  <rect x="68" y="110" width="1064" height="160" fill="#EFF6FF" rx="12" ry="12" style="opacity:0.5" />
+  <rect x="68" y="290" width="1064" height="200" fill="#F0FDF4" rx="12" ry="12" style="opacity:0.5" />
+  <rect x="68" y="510" width="1064" height="220" fill="#FAF5FF" rx="12" ry="12" style="opacity:0.5" />
+
+  <!-- Layer titles -->
+  <text x="100" y="132" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#3B82F6">USER LAYER</text>
+  <text x="100" y="312" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#10B981">DELIVERY LAYER</text>
+  <text x="100" y="532" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#8B5CF6">STATIC ASSETS LAYER</text>
+
+  <!-- ===== USER LAYER ===== -->
+
+  <!-- Desktop Browser -->
+  <rect x="200" y="145" width="180" height="100" fill="#FFFFFF" rx="12" ry="12" stroke="#3B82F6" stroke-width="2" />
+  <rect x="200" y="145" width="180" height="28" fill="#3B82F6" rx="12" ry="12" />
+  <rect x="200" y="159" width="180" height="14" fill="#3B82F6" />
+  <circle cx="218" cy="159" r="5" fill="#93C5FD" />
+  <circle cx="234" cy="159" r="5" fill="#93C5FD" />
+  <circle cx="250" cy="159" r="5" fill="#93C5FD" />
+  <rect x="212" y="155" width="100" height="10" fill="#DBEAFE" rx="4" ry="4" />
+  <rect x="210" y="182" width="160" height="8" fill="#DBEAFE" rx="3" ry="3" />
+  <rect x="210" y="196" width="130" height="8" fill="#DBEAFE" rx="3" ry="3" />
+  <rect x="210" y="210" width="145" height="8" fill="#DBEAFE" rx="3" ry="3" />
+  <text x="290" y="258" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1E293B" text-anchor="middle">Desktop Browser</text>
+  <text x="290" y="273" font-family="Arial, sans-serif" font-size="11" fill="#64748B" text-anchor="middle">Chrome / Firefox / Safari</text>
+
+  <!-- Mobile Browser -->
+  <rect x="510" y="145" width="100" height="100" fill="#FFFFFF" rx="14" ry="14" stroke="#3B82F6" stroke-width="2" />
+  <rect x="518" y="153" width="84" height="60" fill="#DBEAFE" rx="4" ry="4" />
+  <rect x="518" y="153" width="84" height="14" fill="#3B82F6" rx="4" ry="4" />
+  <circle cx="560" cy="228" r="7" fill="#93C5FD" />
+  <rect x="530" y="160" width="50" height="6" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="526" y="174" width="68" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="526" y="184" width="55" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="526" y="194" width="62" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <text x="560" y="258" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1E293B" text-anchor="middle">Mobile Browser</text>
+  <text x="560" y="273" font-family="Arial, sans-serif" font-size="11" fill="#64748B" text-anchor="middle">iOS / Android</text>
+
+  <!-- Tablet Browser -->
+  <rect x="760" y="145" width="140" height="100" fill="#FFFFFF" rx="10" ry="10" stroke="#3B82F6" stroke-width="2" />
+  <rect x="768" y="153" width="124" height="72" fill="#DBEAFE" rx="4" ry="4" />
+  <rect x="768" y="153" width="124" height="16" fill="#3B82F6" rx="4" ry="4" />
+  <circle cx="830" cy="237" r="6" fill="#93C5FD" />
+  <rect x="776" y="160" width="70" height="6" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="776" y="174" width="108" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="776" y="184" width="90" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="776" y="194" width="100" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <rect x="776" y="204" width="80" height="5" fill="#BFDBFE" rx="2" ry="2" />
+  <text x="830" y="258" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1E293B" text-anchor="middle">Tablet Browser</text>
+  <text x="830" y="273" font-family="Arial, sans-serif" font-size="11" fill="#64748B" text-anchor="middle">iPad / Android Tablet</text>
+
+  <!-- ===== DELIVERY LAYER ===== -->
+
+  <!-- CDN -->
+  <rect x="180" y="320" width="220" height="130" fill="#FFFFFF" rx="12" ry="12" stroke="#10B981" stroke-width="2.5" />
+  <rect x="180" y="320" width="220" height="36" fill="#10B981" rx="12" ry="12" />
+  <rect x="180" y="342" width="220" height="14" fill="#10B981" />
+  <text x="290" y="343" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">CDN</text>
+  <text x="290" y="357" font-family="Arial, sans-serif" font-size="10" fill="#D1FAE5" text-anchor="middle">Content Delivery Network</text>
+  <text x="200" y="380" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Global Edge Nodes</text>
+  <text x="200" y="396" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Gzip / Brotli Compression</text>
+  <text x="200" y="412" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; HTTP/2 + TLS/SSL</text>
+  <text x="200" y="428" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Cache-Control Headers</text>
+  <text x="290" y="462" font-family="Arial, sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">e.g. Cloudflare / Fastly / AWS CloudFront</text>
+
+  <!-- Static File Host -->
+  <rect x="490" y="320" width="220" height="130" fill="#FFFFFF" rx="12" ry="12" stroke="#10B981" stroke-width="2.5" />
+  <rect x="490" y="320" width="220" height="36" fill="#059669" rx="12" ry="12" />
+  <rect x="490" y="342" width="220" height="14" fill="#059669" />
+  <text x="600" y="343" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Static File Host</text>
+  <text x="600" y="357" font-family="Arial, sans-serif" font-size="10" fill="#D1FAE5" text-anchor="middle">Origin Server</text>
+  <text x="510" y="380" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Serves index.html</text>
+  <text x="510" y="396" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; No server-side logic</text>
+  <text x="510" y="412" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; HTTPS enforced</text>
+  <text x="510" y="428" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Custom domain support</text>
+  <text x="600" y="462" font-family="Arial, sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">e.g. GitHub Pages / Netlify / Vercel</text>
+
+  <!-- DNS -->
+  <rect x="800" y="320" width="200" height="130" fill="#FFFFFF" rx="12" ry="12" stroke="#10B981" stroke-width="2.5" />
+  <rect x="800" y="320" width="200" height="36" fill="#047857" rx="12" ry="12" />
+  <rect x="800" y="342" width="200" height="14" fill="#047857" />
+  <text x="900" y="343" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">DNS</text>
+  <text x="900" y="357" font-family="Arial, sans-serif" font-size="10" fill="#D1FAE5" text-anchor="middle">Domain Resolution</text>
+  <text x="820" y="380" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; A / CNAME Records</text>
+  <text x="820" y="396" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; SSL Certificate</text>
+  <text x="820" y="412" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; www redirect</text>
+  <text x="820" y="428" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Low TTL for updates</text>
+  <text x="900" y="462" font-family="Arial, sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">e.g. Cloudflare DNS / Route53</text>
+
+  <!-- ===== STATIC ASSETS LAYER ===== -->
+
+  <!-- HTML -->
+  <rect x="110" y="545" width="150" height="155" fill="#FFFFFF" rx="12" ry="12" stroke="#8B5CF6" stroke-width="2" />
+  <rect x="110" y="545" width="150" height="34" fill="#8B5CF6" rx="12" ry="12" />
+  <rect x="110" y="565" width="150" height="14" fill="#8B5CF6" />
+  <text x="185" y="567" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">HTML</text>
+  <text x="185" y="580" font-family="Arial, sans-serif" font-size="10" fill="#EDE9FE" text-anchor="middle">index.html</text>
+  <text x="125" y="600" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Semantic markup</text>
+  <text x="125" y="616" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Meta / OG tags</text>
+  <text x="125" y="632" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; SEO optimized</text>
+  <text x="125" y="648" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Accessibility</text>
+  <text x="125" y="664" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Single file</text>
+  <text x="125" y="680" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; No build step</text>
+
+  <!-- CSS -->
+  <rect x="290" y="545" width="150" height="155" fill="#FFFFFF" rx="12" ry="12" stroke="#8B5CF6" stroke-width="2" />
+  <rect x="290" y="545" width="150" height="34" fill="#7C3AED" rx="12" ry="12" />
+  <rect x="290" y="565" width="150" height="14" fill="#7C3AED" />
+  <text x="365" y="567" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">CSS</text>
+  <text x="365" y="580" font-family="Arial, sans-serif" font-size="10" fill="#EDE9FE" text-anchor="middle">styles.css</text>
+  <text x="305" y="600" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Modern design</text>
+  <text x="305" y="616" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; CSS Grid / Flexbox</text>
+  <text x="305" y="632" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; CSS Variables</text>
+  <text x="305" y="648" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Animations</text>
+  <text x="305" y="664" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Responsive</text>
+  <text x="305" y="680" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Dark mode ready</text>
+
+  <!-- JavaScript -->
+  <rect x="470" y="545" width="150" height="155" fill="#FFFFFF" rx="12" ry="12" stroke="#8B5CF6" stroke-width="2" />
+  <rect x="470" y="545" width="150" height="34" fill="#6D28D9" rx="12" ry="12" />
+  <rect x="470" y="565" width="150" height="14" fill="#6D28D9" />
+  <text x="545" y="567" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">JavaScript</text>
+  <text x="545" y="580" font-family="Arial, sans-serif" font-size="10" fill="#EDE9FE" text-anchor="middle">main.js (optional)</text>
+  <text x="485" y="600" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Vanilla JS only</text>
+  <text x="485" y="616" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Smooth scroll</text>
+  <text x="485" y="632" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Intersection API</text>
+  <text x="485" y="648" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; No frameworks</text>
+  <text x="485" y="664" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Minimal bundle</text>
+  <text x="485" y="680" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Deferred load</text>
+
+  <!-- Images / Fonts -->
+  <rect x="650" y="545" width="150" height="155" fill="#FFFFFF" rx="12" ry="12" stroke="#8B5CF6" stroke-width="2" />
+  <rect x="650" y="545" width="150" height="34" fill="#5B21B6" rx="12" ry="12" />
+  <rect x="650" y="565" width="150" height="14" fill="#5B21B6" />
+  <text x="725" y="567" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Images</text>
+  <text x="725" y="580" font-family="Arial, sans-serif" font-size="10" fill="#EDE9FE" text-anchor="middle">assets/</text>
+  <text x="665" y="600" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; WebP / AVIF</text>
+  <text x="665" y="616" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; SVG icons</text>
+  <text x="665" y="632" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Lazy loading</text>
+  <text x="665" y="648" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Responsive img</text>
+  <text x="665" y="664" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Optimized size</text>
+  <text x="665" y="680" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Alt text</text>
+
+  <!-- Fonts -->
+  <rect x="830" y="545" width="150" height="155" fill="#FFFFFF" rx="12" ry="12" stroke="#8B5CF6" stroke-width="2" />
+  <rect x="830" y="545" width="150" height="34" fill="#4C1D95" rx="12" ry="12" />
+  <rect x="830" y="565" width="150" height="14" fill="#4C1D95" />
+  <text x="905" y="567" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Fonts</text>
+  <text x="905" y="580" font-family="Arial, sans-serif" font-size="10" fill="#EDE9FE" text-anchor="middle">fonts/</text>
+  <text x="845" y="600" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Self-hosted WOFF2</text>
+  <text x="845" y="616" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; font-display: swap</text>
+  <text x="845" y="632" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Subset glyphs</text>
+  <text x="845" y="648" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Preloaded</text>
+  <text x="845" y="664" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Variable fonts</text>
+  <text x="845" y="680" font-family="Arial, sans-serif" font-size="11" fill="#374151">&#9654; Fallback stack</text>
+
+  <!-- ===== CONNECTIONS ===== -->
+
+  <!-- Desktop Browser -> CDN -->
+  <line x1="290" y1="245" x2="290" y2="318" stroke="#3B82F6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow-blue)" />
+  <text x="298" y="285" font-family="Arial, sans-serif" font-size="10" fill="#3B82F6">HTTPS</text>
+
+  <!-- Mobile Browser -> CDN -->
+  <line x1="560" y1="245" x2="400" y2="318" stroke="#3B82F6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow-blue)" />
+
+  <!-- Tablet Browser -> CDN -->
+  <line x1="830" y1="245" x2="900" y2="318" stroke="#3B82F6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow-blue)" />
+
+  <!-- DNS -> CDN -->
+  <line x1="800" y1="385" x2="402" y2="385" stroke="#10B981" stroke-width="2" marker-end="url(#arrow-green)" />
+  <text x="590" y="378" font-family="Arial, sans-serif" font-size="10" fill="#10B981">resolves to</text>
+
+  <!-- CDN -> Static File Host -->
+  <line x1="400" y1="385" x2="488" y2="385" stroke="#10B981" stroke-width="2" marker-end="url(#arrow-green)" />
+  <text x="430" y="378" font-family="Arial, sans-serif" font-size="10" fill="#10B981">origin pull</text>
+
+  <!-- Static File Host -> HTML -->
+  <line x1="540" y1="452" x2="200" y2="543" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+
+  <!-- Static File Host -> CSS -->
+  <line x1="555" y1="452" x2="380" y2="543" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+
+  <!-- Static File Host -> JS -->
+  <line x1="600" y1="452" x2="545" y2="543" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+
+  <!-- Static File Host -> Images -->
+  <line x1="650" y1="452" x2="710" y2="543" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+
+  <!-- Static File Host -> Fonts -->
+  <line x1="680" y1="452" x2="880" y2="543" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+
+  <!-- Legend -->
+  <rect x="68" y="740" width="500" height="44" fill="#FFFFFF" rx="8" ry="8" stroke="#E2E8F0" stroke-width="1" />
+  <line x1="90" y1="762" x2="120" y2="762" stroke="#3B82F6" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow-blue)" />
+  <text x="128" y="766" font-family="Arial, sans-serif" font-size="11" fill="#374151">Browser Request</text>
+  <line x1="240" y1="762" x2="270" y2="762" stroke="#10B981" stroke-width="2" marker-end="url(#arrow-green)" />
+  <text x="278" y="766" font-family="Arial, sans-serif" font-size="11" fill="#374151">CDN / DNS Flow</text>
+  <line x1="390" y1="762" x2="420" y2="762" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" />
+  <text x="428" y="766" font-family="Arial, sans-serif" font-size="11" fill="#374151">Asset Delivery</text>
+
+  <!-- Performance badge -->
+  <rect x="900" y="740" width="232" height="44" fill="#ECFDF5" rx="8" ry="8" stroke="#10B981" stroke-width="1.5" />
+  <text x="916" y="758" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#065F46">&#9889; Performance Targets</text>
+  <text x="916" y="774" font-family="Arial, sans-serif" font-size="11" fill="#047857">LCP &lt;1.2s  ·  FID &lt;10ms  ·  CLS &lt;0.1</text>
+
+</svg>
